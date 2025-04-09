@@ -82,21 +82,33 @@ export default async function Home() {
               />
             </div>
           </Link>
-          <AuthDialog
-            trigger={
-              <Button className="rounded-full px-4 sm:px-5 py-2 h-8 text-sm font-medium bg-primary/90 hover:bg-primary/80 text-white backdrop-blur-md border-none shadow-sm flex items-center gap-2 transition-all">
-                Get Started
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
+          <div className="flex items-center gap-4">
+            <Link href="/chat">
+              <Button variant="outline" className="rounded-full px-4 h-8 text-sm">
+                Chat
               </Button>
-            }
-          />
-          <Link href="/dashboard" className="hidden ml-4">
-            <Button variant="outline" className="rounded-full px-4 h-8 text-sm">
-              Dashboard
-            </Button>
-          </Link>
+            </Link>
+            <Link href="/test">
+              <Button variant="outline" className="rounded-full px-4 h-8 text-sm">
+                Test Chat
+              </Button>
+            </Link>
+            <AuthDialog
+              trigger={
+                <Button className="rounded-full px-4 sm:px-5 py-2 h-8 text-sm font-medium bg-primary/90 hover:bg-primary/80 text-white backdrop-blur-md border-none shadow-sm flex items-center gap-2 transition-all">
+                  Get Started
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Button>
+              }
+            />
+            <Link href="/dashboard" className="hidden ml-4">
+              <Button variant="outline" className="rounded-full px-4 h-8 text-sm">
+                Dashboard
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 

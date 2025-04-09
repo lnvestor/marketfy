@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Marketfy
+
+Marketfy is an AI-powered product research tool for dropshippers, e-commerce sellers, and Amazon FBA sellers. The platform helps users find profitable products to sell online, analyze market trends, and make data-driven business decisions.
+
+## Features
+
+- **AI Assistant**: Chat with our AI to get product recommendations, market insights, and sales strategies
+- **Market Analysis**: Analyze products and niches to identify trends and opportunities
+- **Product Research**: Find high-potential products with validated market demand
+- **Tool Integration**: Use specialized tools for data-driven insights
+
+## Tech Stack
+
+- [Next.js 14](https://nextjs.org/) - React framework
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Supabase](https://supabase.com/) - Authentication and database
+- [Google Generative AI](https://ai.google.dev/) - AI capabilities through Gemini models
+- [AI SDK](https://ai.vercel.ai) - For AI tool integration and chat interfaces
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ 
+- A Google AI API key (get one at [makersuite.google.com](https://makersuite.google.com/app/apikey))
+
+### Environment Setup
+
+1. Create or update your `.env.local` file with the following:
+
+```
+# Supabase credentials
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Google Generative AI
+GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Running the Project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Install dependencies
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Run the development server
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/app` - Next.js app router pages and API routes
+- `src/components` - Reusable UI components
+- `src/lib` - Utility functions, AI config, and tools
+- `src/lib/tools` - AI tools for product research and market analysis
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## AI Tools
 
-## Deploy on Vercel
+The application integrates with Google's Gemini models through the AI SDK, providing:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Chat Interface**: Real-time streaming responses
+- **Product Search**: Find products matching specific criteria
+- **Market Analysis**: Get insights on product markets and trends
+- **Trend Analysis**: Track product popularity over time
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You can extend the available tools by adding new functions to the `src/lib/tools` directory.

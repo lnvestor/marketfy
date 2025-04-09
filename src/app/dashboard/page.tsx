@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerUser } from '@/lib/server-auth';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
+import EnhancedChatWrapper from '@/components/chat/enhanced-chat-wrapper';
 
 export default async function DashboardPage() {
   // Get all cookies for debugging using proper async pattern
@@ -60,113 +61,19 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Products Analyzed</h3>
-            <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-sm text-primary">
-              +24% 
-            </span>
+      <div className="grid grid-cols-1 gap-6">
+        {/* AI Chatbot with dynamic height */}
+        <div className="rounded-lg border bg-card shadow-sm overflow-hidden">
+          <div className="border-b px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700">
+            <h2 className="text-lg font-medium text-white">Market Research Assistant</h2>
           </div>
-          <p className="mt-2 text-3xl font-bold">5,342</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Last 30 days
-          </p>
-        </div>
-
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Potential Revenue</h3>
-            <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-sm text-primary">
-              +16%
-            </span>
-          </div>
-          <p className="mt-2 text-3xl font-bold">$24,890</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Based on current selection
-          </p>
-        </div>
-
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Trending Categories</h3>
-            <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-sm text-primary">
-              Updated
-            </span>
-          </div>
-          <ul className="mt-4 space-y-2">
-            <li className="flex items-center justify-between">
-              <span>Home & Kitchen</span>
-              <span className="text-sm font-medium text-primary">32%</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span>Beauty & Personal Care</span>
-              <span className="text-sm font-medium text-primary">28%</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span>Sports & Outdoors</span>
-              <span className="text-sm font-medium text-primary">24%</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="mt-8 rounded-lg border bg-card p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Recommended Products</h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map((item) => (
-            <div key={item} className="rounded-lg border bg-background p-4">
-              <div className="mb-3 aspect-video rounded-md bg-muted"></div>
-              <h3 className="font-medium">Smart Water Bottle</h3>
-              <div className="mt-1 flex items-center text-sm">
-                <span className="font-medium text-green-600">89% Match</span>
-                <span className="mx-2 text-muted-foreground">|</span>
-                <span className="text-muted-foreground">Est. Profit: $12.40</span>
-              </div>
-              <Link
-                href="/products/details"
-                className="mt-3 inline-flex w-full items-center justify-center rounded bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground"
-              >
-                View Details
-              </Link>
+          <div className="h-[700px]">
+            <div className="h-full">
+              {/* Using enhanced chat component */}
+              <EnhancedChatWrapper />
             </div>
-          ))}
+          </div>
         </div>
-      </div>
-
-      <div className="mt-8 rounded-lg border bg-card p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Recent Market Insights</h2>
-        <ul className="space-y-4">
-          {[1, 2, 3].map((item) => (
-            <li key={item} className="flex items-start gap-4 rounded-lg border bg-background p-4">
-              <div className="rounded-md bg-primary/10 p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                  <path d="M2 22V12C2 7.5 5 4 12 4C19 4 22 7.5 22 12V22"></path>
-                  <path d="M11 14.5a1.5 1.5 0 103 0 1.5 1.5 0 00-3 0z"></path>
-                  <path d="M6 13h1"></path>
-                  <path d="M17 13h1"></path>
-                  <path d="M8 17l.5.5"></path>
-                  <path d="M15.5 17l.5.5"></path>
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-medium">Major Shift in Eco-friendly Products</h4>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Our AI has detected a 34% increase in consumer interest for sustainable alternatives in the home goods category.
-                </p>
-                <div className="mt-2 flex items-center gap-2">
-                  <Link
-                    href="#"
-                    className="text-xs font-medium text-primary"
-                  >
-                    Explore Trend
-                  </Link>
-                  <span className="text-xs text-muted-foreground">3 days ago</span>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );
