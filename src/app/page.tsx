@@ -6,10 +6,43 @@ import { AuthDialog } from "@/components/auth-dialog";
 export default function Home() {
   return (
     <div className="relative overflow-hidden">
-      {/* Background elements */}
+      {/* Background gradient */}
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,var(--tw-gradient-from)_0%,var(--tw-gradient-to)_100%)] from-slate-100 to-slate-50 dark:from-slate-900 dark:to-slate-800"></div>
+      
+      {/* Minimalist wavy SVG background */}
+      <div className="absolute inset-0 -z-5 overflow-hidden opacity-20 dark:opacity-15">
+        <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <path 
+            d="M0,250 C250,150 500,350 750,250 C1000,150 1250,350 1500,250 L1500,1000 L0,1000 Z" 
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            className="text-primary/40"
+            style={{animation: 'wavyBg 20s ease-in-out infinite alternate'}}
+          />
+          <path 
+            d="M0,500 C200,400 400,600 600,500 C800,400 1000,600 1200,500 L1200,1000 L0,1000 Z" 
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            className="text-secondary/30"
+            style={{animation: 'wavyBg 25s ease-in-out infinite alternate-reverse'}}
+          />
+        </svg>
+      </div>
+      
+      {/* Minimal grid overlay */}
+      <div className="absolute inset-0 -z-4 overflow-hidden opacity-10 dark:opacity-5 pointer-events-none">
+        <div className="h-full w-full grid grid-cols-6 grid-rows-6">
+          {[...Array(36)].map((_, i) => (
+            <div key={i} className="border border-primary/10 dark:border-primary/5"></div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Gradient accent - keep this for some subtle color */}
       <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-secondary opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style={{ clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" }}></div>
+        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-secondary opacity-5 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style={{ clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" }}></div>
       </div>
       
       {/* Logo and Auth Button */}
@@ -27,9 +60,9 @@ export default function Home() {
           </Link>
           <AuthDialog
             trigger={
-              <Button className="rounded-full px-4 sm:px-5 py-2 h-auto text-sm font-medium bg-white/30 hover:bg-white/40 dark:bg-black/20 dark:hover:bg-black/30 text-black dark:text-white backdrop-blur-md border border-white/30 dark:border-white/10 shadow-sm flex items-center gap-2 transition-all">
+              <Button className="rounded-full px-4 sm:px-5 py-2 h-8 text-sm font-medium bg-primary/90 hover:bg-primary/80 text-white backdrop-blur-md border-none shadow-sm flex items-center gap-2 transition-all">
                 Get Started
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </Button>
@@ -40,8 +73,8 @@ export default function Home() {
 
       {/* Hero Section */}
       <div className="container max-w-[1400px] mx-auto relative z-10">
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-28 pb-16 md:pt-36 md:pb-24 min-h-[80vh]">
-          <div className="flex flex-col space-y-6 px-4 md:px-8">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-20 pb-0 md:pt-28 md:pb-0">
+          <div className="flex flex-col space-y-4 px-4 md:px-8">
             <div className="inline-flex mb-2">
               <div className="px-4 py-1.5 rounded-full bg-white/20 dark:bg-black/20 backdrop-blur-md border border-primary/20 shadow-sm">
                 <div className="flex items-center gap-2">
@@ -58,7 +91,7 @@ export default function Home() {
             </p>
             
             {/* Stats bar */}
-            <div className="flex flex-wrap gap-8 pt-10">
+            <div className="flex flex-wrap gap-8 pt-6">
               <div>
                 <div className="text-3xl font-bold">50K+</div>
                 <div className="text-muted-foreground">Products Analyzed</div>
@@ -75,14 +108,14 @@ export default function Home() {
           </div>
           
           {/* Hero image and grid */}
-          <div className="flex flex-col justify-center items-center relative h-[500px]">
+          <div className="flex flex-col justify-center items-center relative">
             <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-10 blur-3xl rounded-full"></div>
-            <div className="relative z-10 mb-8">
+            <div className="relative z-10 mb-4">
               <Image 
                 src="/logo.png" 
                 alt="Marketfy Platform" 
-                width={300} 
-                height={300}
+                width={250} 
+                height={250}
                 className="object-contain"
               />
             </div>
@@ -155,11 +188,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </div>
-      
-      {/* Bottom gradient */}
-      <div className="absolute inset-x-0 bottom-0 -z-10 transform-gpu overflow-hidden blur-3xl" aria-hidden="true">
-        <div className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-primary to-secondary opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style={{ clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" }}></div>
       </div>
     </div>
   );
