@@ -81,13 +81,48 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithGoogle = async () => {
     setIsLoading(true);
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    setIsLoading(false);
+    try {
+      const currentPath = window.location.pathname;
+      
+      // Generate a nonce for extra security
+      const generateNonce = async () => {
+        const nonce = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))));
+        return nonce;
+      };
+      
+      const nonce = await generateNonce();
+      
+      // Store nonce in sessionStorage to validate on return
+      sessionStorage.setItem('auth_nonce', nonce);
+      
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(currentPath)}`,
+          queryParams: {
+            // Request a refresh token for offline access
+            access_type: 'offline',
+            // Force consent screen to ensure refresh token is returned
+            prompt: 'consent',
+            // Include email scope
+            scope: 'email profile',
+            // Use nonce for security
+            nonce: nonce,
+          },
+        },
+      });
+      
+      if (error) {
+        console.error('Error initiating Google sign-in:', error);
+        setIsLoading(false);
+        throw error;
+      }
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      setIsLoading(false);
+      throw error;
+    }
+    // Note: We don't set isLoading to false here because the page will redirect
   };
 
   const signOut = async () => {

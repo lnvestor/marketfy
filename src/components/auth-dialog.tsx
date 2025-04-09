@@ -72,11 +72,14 @@ export function AuthDialog({ trigger }: { trigger: React.ReactNode }) {
 
   const handleGoogleSignIn = async () => {
     setError(null);
+    setIsLoading(true);
     try {
       await signInWithGoogle();
       // Note: The redirect happens automatically via Supabase
+      // The page will be redirected, so no need to update UI state here
     } catch (err) {
-      setError("Failed to sign in with Google");
+      setError("Failed to sign in with Google. Please try again.");
+      setIsLoading(false);
       console.error(err);
     }
   };

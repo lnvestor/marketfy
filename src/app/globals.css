@@ -119,6 +119,22 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Style main content when sidebar is expanded */
+  body.sidebar-expanded main {
+    padding-left: 16rem;
+    width: 100%;
+    transition: padding-left 300ms ease;
+    will-change: padding-left;
+  }
+  
+  /* Style main content when sidebar is collapsed (default) */
+  main {
+    padding-left: 4rem;
+    width: 100%;
+    transition: padding-left 300ms ease;
+    will-change: padding-left;
+  }
 }
 
 @keyframes wavyBg {

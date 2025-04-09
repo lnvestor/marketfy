@@ -2,8 +2,32 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { AuthDialog } from "@/components/auth-dialog";
+import { cookies, headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { createServerClient } from '@supabase/ssr';
 
-export default function Home() {
+export default async function Home() {
+  // Check if user is already logged in
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get: (name) => cookies().get(name)?.value,
+        set: () => {},
+        remove: () => {},
+      }
+    }
+  );
+  
+  // Get session to check if user is authenticated
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  // If user is logged in, redirect to dashboard
+  if (session) {
+    console.log("User is authenticated, redirecting to dashboard");
+    redirect('/dashboard');
+  }
   return (
     <div className="relative overflow-hidden">
       {/* Background gradient */}
@@ -68,6 +92,11 @@ export default function Home() {
               </Button>
             }
           />
+          <Link href="/dashboard" className="hidden ml-4">
+            <Button variant="outline" className="rounded-full px-4 h-8 text-sm">
+              Dashboard
+            </Button>
+          </Link>
         </div>
       </div>
 
