@@ -91,14 +91,14 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
     <>
       <div 
         ref={dropAreaRef}
-        className={`relative p-4 border-t border-emerald-100/20 dark:border-emerald-800/20 bg-white/10 dark:bg-neutral-900/10 backdrop-blur-xl z-40
-          ${isDragging ? 'ring-1 ring-emerald-400/30' : ''}`}
+        className={`relative p-4 border-t border-black/20 dark:border-white/20 bg-white/10 dark:bg-neutral-900/10 backdrop-blur-xl z-40
+          ${isDragging ? 'ring-1 ring-black/30' : ''}`}
       >
         {isDragging && (
           <div className="absolute inset-0 bg-white/60 dark:bg-black/60 backdrop-blur-md flex items-center justify-center z-50">
-            <div className="p-3 flex items-center gap-2 bg-emerald-50/20 dark:bg-emerald-900/20 backdrop-blur-lg rounded-full px-4 py-2 shadow-xl">
-              <Upload className="h-4 w-4 text-emerald-500" />
-              <span className="text-sm text-emerald-600 dark:text-emerald-300">Drop to upload</span>
+            <div className="p-3 flex items-center gap-2 bg-black/5 dark:bg-white/5 backdrop-blur-lg rounded-full px-4 py-2 shadow-xl">
+              <Upload className="h-4 w-4 text-black dark:text-white" />
+              <span className="text-sm text-black dark:text-white">Drop to upload</span>
             </div>
           </div>
         )}
@@ -176,7 +176,7 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
                 {/* Right-side Buttons */}
                 <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1 z-10 bg-transparent pl-1 backdrop-blur-lg">
                   {/* Attachment */}
-                  <label className="p-1 rounded-full text-emerald-500/70 hover:text-emerald-400 transition-colors cursor-pointer">
+                  <label className="p-1 rounded-full text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
                     <Paperclip className="h-4 w-4" />
                     <input
                       type="file"
@@ -194,8 +194,8 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
                     onClick={() => setReasoningMode(!reasoningMode)}
                     className={`p-1 rounded-full transition-colors
                       ${reasoningMode 
-                        ? 'text-emerald-400 dark:text-emerald-300' 
-                        : 'text-emerald-500/70 hover:text-emerald-400 dark:hover:text-emerald-300'
+                        ? 'text-black dark:text-white' 
+                        : 'text-black/70 hover:text-black dark:text-white/70 dark:hover:text-white'
                       }`}
                   >
                     <Brain className="h-4 w-4" />
@@ -215,7 +215,7 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
                     <button
                       type="submit"
                       disabled={!input.trim() && (!files || files.length === 0)}
-                      className="ml-1 rounded-full glass-button p-1.5 text-emerald-600 dark:text-emerald-300 disabled:opacity-30 disabled:text-gray-400 disabled:cursor-not-allowed transition-all"
+                      className="ml-1 rounded-full glass-button p-1.5 text-black dark:text-white disabled:opacity-30 disabled:text-gray-400 disabled:cursor-not-allowed transition-all"
                     >
                       <Send className="h-4 w-4" />
                     </button>

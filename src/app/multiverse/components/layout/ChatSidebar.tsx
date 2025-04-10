@@ -181,8 +181,8 @@ export function ChatSidebar({
                   <div className={`flex items-center gap-2 ${sidebarCollapsed ? 'w-8' : ''}`}>
                     <div className={`h-7 w-7 flex items-center justify-center rounded-full overflow-hidden
                       ${selectedSession === session.id 
-                        ? 'bg-emerald-500 text-white' 
-                        : 'text-emerald-300 bg-gray-50'
+                        ? 'bg-black text-white' 
+                        : 'text-gray-300 bg-gray-50'
                       }`}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
                         <circle cx="12" cy="12" r="10" />
@@ -198,7 +198,7 @@ export function ChatSidebar({
                             onChange={(e) => onUpdateChatName(session.id, e.target.value)}
                             className={`text-sm bg-transparent border-none focus:outline-none focus:ring-0 w-full cursor-pointer
                               ${selectedSession === session.id 
-                                ? 'text-emerald-700 font-medium' 
+                                ? 'text-black font-medium' 
                                 : 'text-gray-700'
                               }`}
                           />

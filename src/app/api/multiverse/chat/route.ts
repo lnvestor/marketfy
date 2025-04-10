@@ -1,4 +1,5 @@
-import { anthropic } from '@ai-sdk/anthropic';
+import { google } from '@ai-sdk/google';
+import { GoogleGenerativeAIProviderMetadata } from '@ai-sdk/google';
 import { StreamData, streamText, smoothStream } from 'ai';
 import { 
   // NetSuite tools
@@ -50,8 +51,103 @@ export const runtime = 'nodejs';
 // Set cache control headers
 export const fetchCache = 'force-no-store';
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  throw new Error('Missing ANTHROPIC_API_KEY environment variable');
+if (!process.env.GOOGLE_API_KEY) {
+  throw new Error('Missing GOOGLE_API_KEY environment variable');
+}
+
+/**
+ * Process Google AI safety ratings into a standardized format
+ * @param safetyRatings The safety ratings from Google Generative AI
+ * @returns Processed safety information with risk levels
+ */
+function processSafetyRatings(safetyRatings: any[]) {
+  if (!safetyRatings || !Array.isArray(safetyRatings)) return null;
+  
+  // Convert Google's probability levels to numeric scores (0-100)
+  const getProbabilityScore = (probability: string): number => {
+    switch (probability) {
+      case 'NEGLIGIBLE': return 0;
+      case 'LOW': return 25;
+      case 'MEDIUM': return 50;
+      case 'HIGH': return 75;
+      case 'VERY_HIGH': return 100;
+      default: return -1;
+    }
+  };
+  
+  // Convert Google's severity levels to numeric scores (0-100)
+  const getSeverityScore = (severity: string): number => {
+    switch (severity) {
+      case 'HARM_SEVERITY_NEGLIGIBLE': return 0;
+      case 'HARM_SEVERITY_LOW': return 25;
+      case 'HARM_SEVERITY_MEDIUM': return 50;
+      case 'HARM_SEVERITY_HIGH': return 75;
+      case 'HARM_SEVERITY_EXTREME': return 100;
+      default: return -1;
+    }
+  };
+  
+  // Calculate overall risk score (0-100)
+  const calculateRiskScore = (probability: number, severity: number): number => {
+    if (probability < 0 || severity < 0) return -1;
+    // Weight probability more than severity in risk calculation
+    return Math.min(100, Math.round((probability * 0.7) + (severity * 0.3)));
+  };
+  
+  // Generate user-friendly category names
+  const getFriendlyCategoryName = (category: string): string => {
+    switch (category) {
+      case 'HARM_CATEGORY_HARASSMENT': return 'Harassment';
+      case 'HARM_CATEGORY_HATE_SPEECH': return 'Hate Speech';
+      case 'HARM_CATEGORY_SEXUALLY_EXPLICIT': return 'Sexually Explicit';
+      case 'HARM_CATEGORY_DANGEROUS_CONTENT': return 'Dangerous Content';
+      default: return category;
+    }
+  };
+  
+  // Process each rating
+  const processedRatings = safetyRatings.map(rating => {
+    const probabilityScore = rating.probabilityScore 
+      ? Math.round(rating.probabilityScore * 100) 
+      : getProbabilityScore(rating.probability);
+    
+    const severityScore = rating.severityScore 
+      ? Math.round(rating.severityScore * 100) 
+      : getSeverityScore(rating.severity);
+    
+    const riskScore = calculateRiskScore(probabilityScore, severityScore);
+    
+    return {
+      category: rating.category,
+      friendlyName: getFriendlyCategoryName(rating.category),
+      probability: rating.probability,
+      severity: rating.severity,
+      probabilityScore,
+      severityScore,
+      riskScore,
+      blocked: !!rating.blocked
+    };
+  });
+  
+  // Calculate overall content risk score
+  const overallRiskScore = processedRatings.length > 0
+    ? Math.max(...processedRatings.map(r => r.riskScore))
+    : 0;
+  
+  // Determine risk level
+  let riskLevel = 'low';
+  if (overallRiskScore >= 75) riskLevel = 'critical';
+  else if (overallRiskScore >= 50) riskLevel = 'high';
+  else if (overallRiskScore >= 25) riskLevel = 'medium';
+  
+  return {
+    ratings: processedRatings,
+    overall: {
+      riskScore: overallRiskScore,
+      riskLevel,
+      hasBlockedContent: processedRatings.some(r => r.blocked)
+    }
+  };
 }
 
 function getStatusFromResult(result: unknown): 'in-progress' | 'error' | 'complete' {
@@ -198,8 +294,14 @@ export async function POST(req: Request) {
     
     // Log environment variables status
     console.log('Environment variables check:', {
-      anthropicKeySet: !!process.env.ANTHROPIC_API_KEY,
-      anthropicKeyLength: process.env.ANTHROPIC_API_KEY?.length,
+      // Google API key (AIza... format)
+      googleKeySet: !!process.env.GOOGLE_API_KEY,
+      googleKeyLength: process.env.GOOGLE_API_KEY?.length,
+      googleKeyFormat: process.env.GOOGLE_API_KEY?.startsWith('AIza') ? 'valid' : 'invalid',
+      googleKeyPreview: process.env.GOOGLE_API_KEY && process.env.GOOGLE_API_KEY.length > 8 
+        ? `${process.env.GOOGLE_API_KEY.substring(0, 6)}...${process.env.GOOGLE_API_KEY.substring(process.env.GOOGLE_API_KEY.length - 4)}`
+        : null,
+      // Perplexity API key
       perplexityKeySet: !!process.env.PERPLEXITY_API_KEY,
       perplexityKeyLength: process.env.PERPLEXITY_API_KEY?.length,
       perplexityKeyPreview: process.env.PERPLEXITY_API_KEY && process.env.PERPLEXITY_API_KEY.length > 8 
@@ -226,7 +328,7 @@ export async function POST(req: Request) {
 
       
       const result = streamText({
-        model: anthropic('claude-3-7-sonnet-20250219'),
+        model: google('gemini-1.5-pro-latest'),
         messages: uniqueMessages,
         temperature: 0.5, // Lower temperature for more deterministic responses
         maxTokens: 16000, // Reduce max tokens to avoid approaching limits
@@ -236,17 +338,34 @@ export async function POST(req: Request) {
           delayInMs: 1, // No delay for Vercel deployment
           chunking: 'word', 
         }),
-        headers: {
-          "anthropic-beta": "token-efficient-tools-2025-02-19",
-          "anthropic-version": "2023-06-01"
-
-        },
         providerOptions: {
-          anthropic: {
-            thinking: reasoningMode 
-              ? { type: 'enabled', budgetTokens: 12000 }
-              : undefined
-          },
+          google: {
+            // Enable Search Grounding with dynamic retrieval
+            useSearchGrounding: true,
+            dynamicRetrievalConfig: {
+              mode: 'MODE_DYNAMIC', // Run retrieval only when system decides necessary
+              dynamicThreshold: 0.8, // Higher threshold makes search more selective
+            },
+            // Safety settings
+            safetySettings: [
+              {
+                category: 'HARM_CATEGORY_HARASSMENT',
+                threshold: 'BLOCK_ONLY_HIGH'
+              },
+              {
+                category: 'HARM_CATEGORY_HATE_SPEECH',
+                threshold: 'BLOCK_ONLY_HIGH'
+              },
+              {
+                category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                threshold: 'BLOCK_ONLY_HIGH'
+              },
+              {
+                category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+                threshold: 'BLOCK_ONLY_HIGH'
+              }
+            ]
+          }
         },
       tools: (() => {
         // Initialize empty tools object
@@ -939,33 +1058,98 @@ export async function POST(req: Request) {
         console.log('Stream finished');
         console.log('Final message:', currentText);
         
-        // Log reasoning data if available
-        if (response.reasoning) {
-          console.log('Reasoning text:', response.reasoning);
+        // Extract Google grounding metadata (sources, search queries, etc.)
+        if (response.providerMetadata?.google) {
+          const metadata = response.providerMetadata.google as GoogleGenerativeAIProviderMetadata;
           
-          // Add reasoning annotation when we reach the end of the stream
-          const reasoningAnnotation: MessageAnnotation = {
-            type: 'reasoning',
-            content: response.reasoning,
-            notification: {
-              show: false,
-              type: 'inline'
+          // Log grounding metadata if available
+          if (metadata.groundingMetadata) {
+            console.log('Google Search Grounding used:', {
+              searchQueries: metadata.groundingMetadata.webSearchQueries || [],
+              hasSearchEntryPoint: !!metadata.groundingMetadata.searchEntryPoint,
+              supportsCount: metadata.groundingMetadata.groundingSupports?.length || 0
+            });
+            
+            // Add sources annotation
+            try {
+              const sourcesAnnotation: MessageAnnotation = {
+                type: 'sources',
+                content: JSON.stringify(metadata.groundingMetadata),
+                notification: {
+                  show: false,
+                  type: 'inline'
+                }
+              };
+              data.appendMessageAnnotation(sourcesAnnotation);
+              console.log('Added sources annotation from Google grounding metadata');
+            } catch (e) {
+              console.log('Failed to append sources annotation:', e);
             }
-          };
+          }
           
-          try {
-            data.appendMessageAnnotation(reasoningAnnotation);
-            console.log('Added reasoning annotation from response.reasoning');
-          } catch (e) {
-            console.log('Failed to append reasoning annotation:', e);
+          // Process safety ratings if available
+          if (metadata.safetyRatings) {
+            // Log original ratings
+            console.log('Raw safety ratings:', metadata.safetyRatings);
+            
+            // Process ratings with our standardization function
+            const processedRatings = processSafetyRatings(metadata.safetyRatings);
+            
+            if (processedRatings) {
+              console.log('Safety risk assessment:', {
+                riskLevel: processedRatings.overall.riskLevel,
+                riskScore: processedRatings.overall.riskScore,
+                hasBlockedContent: processedRatings.overall.hasBlockedContent
+              });
+              
+              // Log details about each category's risk
+              processedRatings.ratings.forEach(rating => {
+                console.log(`${rating.friendlyName}: risk=${rating.riskScore}% ${rating.blocked ? '(BLOCKED)' : ''}`);
+              });
+              
+              // Add safety rating annotation for UI
+              try {
+                const safetyAnnotation: MessageAnnotation = {
+                  type: 'safety-rating',
+                  content: JSON.stringify(processedRatings),
+                  notification: {
+                    show: processedRatings.overall.hasBlockedContent || 
+                          processedRatings.overall.riskLevel === 'high' || 
+                          processedRatings.overall.riskLevel === 'critical',
+                    type: 'toast',
+                    style: processedRatings.overall.hasBlockedContent ? 'error' : 
+                           processedRatings.overall.riskLevel === 'critical' ? 'error' :
+                           processedRatings.overall.riskLevel === 'high' ? 'warning' : 'info'
+                  }
+                };
+                data.appendMessageAnnotation(safetyAnnotation);
+                console.log('Added processed safety rating annotation');
+              } catch (e) {
+                console.log('Failed to append safety rating annotation:', e);
+              }
+            }
           }
         }
         
-        if (response.reasoningDetails && response.reasoningDetails.details) {
-          console.log('Reasoning details (first 3):', 
-            response.reasoningDetails.details.slice(0, 3).map(d => d.type === 'text' ? d.text.substring(0, 100) + '...' : '[redacted]')
-          );
-          console.log('Total reasoning steps:', response.reasoningDetails.details.length);
+        // Note: Image generation is not supported in gemini-1.5-pro-latest
+        
+        // Legacy reasoning support (from Claude) - kept for backward compatibility
+        if (response.reasoning) {
+          console.log('Reasoning text available (legacy):', response.reasoning.substring(0, 100) + '...');
+          
+          try {
+            const reasoningAnnotation: MessageAnnotation = {
+              type: 'reasoning',
+              content: response.reasoning,
+              notification: {
+                show: false,
+                type: 'inline'
+              }
+            };
+            data.appendMessageAnnotation(reasoningAnnotation);
+          } catch (e) {
+            console.log('Failed to append reasoning annotation:', e);
+          }
         }
 
         try {
@@ -1025,8 +1209,9 @@ export async function POST(req: Request) {
     return result.toDataStreamResponse({
       data,
       sendUsage: true,
-      sendReasoning: true,
-      sendReasoningDetails: true, // Add this line to send detailed reasoning info
+      sendReasoning: false, // Google doesn't support reasoning mode like Claude
+      sendReasoningDetails: false, // Google doesn't support reasoning details
+      sendSources: true, // Send sources metadata from Google search
       getErrorMessage: (error: unknown) => {
         const err = error as Error;
         
@@ -1065,8 +1250,9 @@ export async function POST(req: Request) {
     return result.toDataStreamResponse({
       data,
       sendUsage: true,
-      sendReasoning: true,
-      sendReasoningDetails: true
+      sendReasoning: false,
+      sendReasoningDetails: false,
+      sendSources: true
     });
   } catch (error) {
     console.error('Chat stream error:', error);
