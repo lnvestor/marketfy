@@ -101,19 +101,19 @@ export function ChatSidebar({
       <div className="flex h-full relative">
         <motion.div 
           initial={false}
-          className={`h-full z-50 border-r border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex flex-col transition-all duration-300 ${
+          className={`h-full z-50 border-r border-emerald-100 bg-white flex flex-col transition-all duration-300 ${
             sidebarCollapsed ? 'w-14' : 'w-56'
           }`}
         >
-        {/* Logo */}
+        {/* Logo - Show logo.png when expanded, star.png when collapsed */}
         <div className="px-3 py-3 flex items-center justify-center">
           {sidebarCollapsed ? (
-            <div className="w-6 h-6 relative">
-              <Image src="/integriverse/logo.png" alt="Integriverse" width={22} height={22} className="object-contain" />
+            <div className="w-10 h-10 relative">
+              <Image src="/integriverse/star.png" alt="Marketfy" width={36} height={36} className="object-contain" />
             </div>
           ) : (
-            <div className="h-5 relative">
-              <Image src="/integriverse/logo.png" alt="Integriverse" width={40} height={16} className="object-contain" />
+            <div className="h-10 relative flex items-center justify-center">
+              <Image src="/integriverse/logo.png" alt="Marketfy" width={120} height={40} className="object-contain" />
             </div>
           )}
         </div>
@@ -124,20 +124,20 @@ export function ChatSidebar({
           <button
             onClick={onNewChat}
             disabled={isLoading || aiLoading}
-            className={`mb-2 flex items-center gap-3 rounded-md p-2 text-black dark:text-white bg-gray-50 dark:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${sidebarCollapsed ? 'justify-center' : ''}`}
+            className={`mb-2 flex items-center gap-3 rounded-md p-2 text-emerald-700 bg-white border border-emerald-100 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${sidebarCollapsed ? 'justify-center' : ''}`}
           >
             {isLoading ? (
-              <div className="animate-pulse h-4 w-4 rounded-full border-[1.5px] border-current border-b-transparent animate-spin" />
+              <div className="animate-pulse h-4 w-4 rounded-full border-[1.5px] border-emerald-500 border-b-transparent animate-spin" />
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-600">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             )}
             {!sidebarCollapsed && (
-              <span className="text-xs">
+              <span className="text-xs font-medium">
                 {isLoading ? (
-                  <span className="inline-flex items-center">
+                  <span className="inline-flex items-center text-emerald-600">
                     <span className="animate-ellipsis tracking-wider">.</span>
                     <span className="animate-ellipsis delay-300 tracking-wider">.</span>
                     <span className="animate-ellipsis delay-600 tracking-wider">.</span>
@@ -152,12 +152,12 @@ export function ChatSidebar({
         </div>
 
         {/* Divider */}
-        <div className="mx-3 my-2 h-px bg-gray-100 dark:bg-neutral-800"></div>
+        <div className="mx-3 my-2 h-px bg-emerald-100"></div>
 
         {/* Chat List Heading */}
         {!sidebarCollapsed && (
           <div className="px-4 py-2 flex items-center justify-between">
-            <h3 className="text-xs text-gray-400 uppercase">Chats</h3>
+            <h3 className="text-xs text-emerald-600 font-medium uppercase">Chats</h3>
           </div>
         )}
 
@@ -173,16 +173,16 @@ export function ChatSidebar({
                 onClick={() => onSelectChat(session.id)}
                 className={`group p-2 rounded-md cursor-pointer transition-all duration-200 mb-1
                   ${selectedSession === session.id
-                    ? 'bg-white dark:bg-black/30'
-                    : 'hover:bg-gray-50 dark:hover:bg-neutral-800/50'
+                    ? 'bg-white shadow-sm'
+                    : 'hover:bg-gray-50'
                   } ${sidebarCollapsed ? 'flex justify-center' : ''}`}
               >
                 <div className="flex items-center justify-between w-full">
                   <div className={`flex items-center gap-2 ${sidebarCollapsed ? 'w-8' : ''}`}>
                     <div className={`h-7 w-7 flex items-center justify-center rounded-full overflow-hidden
                       ${selectedSession === session.id 
-                        ? 'bg-black dark:bg-white text-white dark:text-black' 
-                        : 'text-gray-400 bg-gray-100 dark:bg-neutral-800'
+                        ? 'bg-emerald-500 text-white' 
+                        : 'text-emerald-300 bg-gray-50'
                       }`}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
                         <circle cx="12" cy="12" r="10" />
@@ -198,8 +198,8 @@ export function ChatSidebar({
                             onChange={(e) => onUpdateChatName(session.id, e.target.value)}
                             className={`text-sm bg-transparent border-none focus:outline-none focus:ring-0 w-full cursor-pointer
                               ${selectedSession === session.id 
-                                ? 'text-gray-800 dark:text-gray-200' 
-                                : 'text-gray-700 dark:text-gray-300'
+                                ? 'text-emerald-700 font-medium' 
+                                : 'text-gray-700'
                               }`}
                           />
                         </div>
@@ -323,7 +323,7 @@ export function ChatSidebar({
         {/* Collapse Button (Outside Sidebar) */}
         <button
           onClick={onToggleCollapse}
-          className="h-8 w-8 absolute -right-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-neutral-900 border border-gray-100 dark:border-neutral-800 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 shadow-sm z-50"
+          className="h-8 w-8 absolute -right-4 top-1/2 transform -translate-y-1/2 bg-white border border-emerald-100 rounded-full flex items-center justify-center text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors shadow-sm z-50"
         >
           <PanelLeftClose className={`h-3.5 w-3.5 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
         </button>

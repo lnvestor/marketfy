@@ -285,7 +285,16 @@ function MultiverseContent() {
   }, [handleInputChange]);
 
   return (
-    <main className="h-screen flex overflow-hidden bg-white dark:bg-neutral-900">
+    <main className="h-screen flex overflow-hidden bg-white">
+      {/* Background grid pattern */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:160px_160px]"></div>
+      </div>
+      
+      {/* Subtle glow effects with emerald tint */}
+      <div className="absolute right-1/4 top-1/4 w-96 h-96 bg-emerald-500/[0.02] rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute left-1/4 bottom-1/3 w-96 h-96 bg-emerald-500/[0.02] rounded-full blur-3xl pointer-events-none"></div>
       
       {/* Sidebar */}
       <ChatSidebar
@@ -311,13 +320,13 @@ function MultiverseContent() {
         }}
       />
 
-      <div className="flex-1 flex flex-col min-w-0 relative">
+      <div className="flex-1 flex flex-col min-w-0 relative z-10">
         {/* Mobile menu button */}
         <button
           onClick={() => setMobileSidebarOpen(true)}
-          className="lg:hidden absolute top-4 left-4 h-10 w-10 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center z-50"
+          className="lg:hidden absolute top-4 left-4 h-10 w-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center z-50 hover:bg-emerald-50 transition-colors"
         >
-          <Menu className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
+          <Menu className="h-5 w-5 text-emerald-600" />
         </button>
         
         {/* Main Content */}
@@ -325,7 +334,7 @@ function MultiverseContent() {
           <div className="flex-1 flex flex-col overflow-hidden">
             <div 
               ref={chatContainerRef}
-              className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scrollbar-track-transparent pb-20"
+              className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-emerald-200 scrollbar-track-transparent pb-20"
             >
               {messages.length === 0 && !selectedSession ? (
                 <ChatWelcome
@@ -334,9 +343,9 @@ function MultiverseContent() {
               ) : messages.length === 0 && selectedSession && isLoading ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="inline-flex items-center gap-1.5">
-                    <span className="animate-ellipsis tracking-wider text-2xl text-black dark:text-white opacity-60">•</span>
-                    <span className="animate-ellipsis delay-300 tracking-wider text-2xl text-black dark:text-white opacity-60">•</span>
-                    <span className="animate-ellipsis delay-600 tracking-wider text-2xl text-black dark:text-white opacity-60">•</span>
+                    <span className="animate-ellipsis tracking-wider text-2xl text-emerald-500 opacity-60">•</span>
+                    <span className="animate-ellipsis delay-300 tracking-wider text-2xl text-emerald-500 opacity-60">•</span>
+                    <span className="animate-ellipsis delay-600 tracking-wider text-2xl text-emerald-500 opacity-60">•</span>
                   </div>
                 </div>
               ) : messages.length === 0 && selectedSession ? (
@@ -350,7 +359,7 @@ function MultiverseContent() {
                       priority
                     />
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Start a conversation</p>
+                  <p className="text-sm text-gray-500">Start a conversation</p>
                 </div>
               ) : (
                 <ChatMessages
