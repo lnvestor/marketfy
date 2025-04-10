@@ -66,7 +66,7 @@ export default function Home() {
             <div className="relative">
               <Image
                 src="/integriverse/logo.png"
-                alt="Integriverse Logo"
+                alt="Marketfy Logo"
                 width={100}
                 height={100}
                 className="rounded-xl"
@@ -74,7 +74,7 @@ export default function Home() {
             </div>
           </div>
           <Button
-            className="rounded-md text-sm h-9 px-5 bg-black/80 backdrop-filter backdrop-blur-sm border border-white/10 text-white/90 hover:bg-black/70 hover:text-white transition-all duration-300 group flex items-center shadow-sm"
+            className="rounded-full text-sm h-9 px-6 bg-white/80 backdrop-filter backdrop-blur-sm border border-black/10 text-black/90 hover:bg-white/90 hover:text-black transition-all duration-300 group flex items-center shadow-sm"
             onClick={() => setShowAuth(true)}
           >
             <span className="font-normal">Get Started</span>
@@ -161,7 +161,7 @@ export default function Home() {
                         id="email"
                         name="email"
                         type="email" 
-                        className="w-full px-3 py-2 rounded-md border border-zinc-200 text-black focus:border-gray-400 focus:outline-none text-sm" 
+                        className="w-full px-3 py-2 rounded-full border border-zinc-200 text-black focus:border-gray-400 focus:outline-none text-sm" 
                         required
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
@@ -176,14 +176,14 @@ export default function Home() {
                         id="password"
                         name="password"
                         type="password" 
-                        className="w-full px-3 py-2 rounded-md border border-zinc-200 text-black focus:border-gray-400 focus:outline-none text-sm" 
+                        className="w-full px-3 py-2 rounded-full border border-zinc-200 text-black focus:border-gray-400 focus:outline-none text-sm" 
                         required 
                       />
                     </div>
                     <button
                       type="submit"
                       disabled={isSigningIn}
-                      className="w-full h-11 rounded-md bg-black text-white font-medium hover:opacity-90 transition-all flex items-center justify-center"
+                      className="w-full h-11 rounded-full bg-black text-white font-medium hover:opacity-90 transition-all flex items-center justify-center"
                     >
                       {isSigningIn ? (
                         <>
@@ -217,7 +217,7 @@ export default function Home() {
                       window.location.href = '/api/auth/signin/google';
                     }}
                     disabled={isSigningIn}
-                    className="w-full flex items-center justify-center gap-2 h-11 rounded-md border border-zinc-200 hover:bg-gray-50 transition-colors disabled:opacity-70"
+                    className="w-full flex items-center justify-center gap-2 h-11 rounded-full border border-zinc-200 hover:bg-gray-50 transition-colors disabled:opacity-70"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24">
                       <path
@@ -270,23 +270,45 @@ export default function Home() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-12">
               {/* Text Content - Left */}
               <div className="flex-1 flex flex-col items-start text-left gap-8">
+                {/* Pill Tag with Glassy Look */}
+                <div className="mb-4 inline-block">
+                  <div className="relative">
+                    <span className="px-4 py-1.5 text-xs font-medium rounded-full flex items-center gap-1.5 bg-gradient-to-r from-white/80 to-white/60 backdrop-filter backdrop-blur-sm border border-black/5 text-black shadow-sm relative z-10">
+                      <Sparkles className="w-4 h-4 text-black/90 animate-pulse-slow" />
+                      <span>AI-Powered Product Research</span>
+                    </span>
+                    
+                    {/* Inner glow */}
+                    <div className="absolute inset-0 rounded-full bg-white/50 blur-sm -z-10"></div>
+                    
+                    {/* Outer glow */}
+                    <div className="absolute -inset-1 rounded-full opacity-40 blur-md -z-20 animate-pulse"
+                        style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.01) 100%)" }}></div>
+                    
+                    {/* Shine effect */}
+                    <div className="absolute inset-0 overflow-hidden rounded-full -z-30">
+                      <div className="absolute -inset-[100%] animate-shine bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+                    </div>
+                  </div>
+                </div>
+                
                 {/* Title */}
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-black">
-                  Build integrations with AI assistance
+                  Uncover Hidden <span className="underline decoration-black decoration-4 underline-offset-4">Gems</span> for Your E-Commerce Empire
                 </h1>
                 
                 {/* Description */}
-                <p className="text-xl text-gray-600 max-w-2xl">
-                  Create powerful integrations effortlessly with our AI-powered platform. Connect your favorite tools and automate your workflows.
+                <p className="text-base text-gray-400 max-w-xl leading-relaxed">
+                  Stop wasting hours on manual research with spying tools. Our AI agent works for you, analyzing billions of data points across marketplaces to identify winning products before they explode. Get automated, laser-precision intelligence for dropshipping and FBA success.
                 </p>
                 
                 {/* Get Started Button */}
                 <Button
                   size="lg"
-                  className="rounded-md text-base h-12 px-8 bg-black/90 backdrop-filter backdrop-blur-sm border border-white/10 text-white/90 hover:bg-black/80 hover:text-white transition-all duration-300 mt-4 group flex items-center shadow-sm"
+                  className="rounded-full text-base h-12 px-10 bg-white/80 backdrop-filter backdrop-blur-sm border border-black/10 text-black/90 hover:bg-white/90 hover:text-black transition-all duration-300 mt-4 group flex items-center shadow-sm"
                   onClick={() => setShowAuth(true)}
                 >
-                  <span className="font-normal">Get Started</span>
+                  <span className="font-normal">Find Winning Products</span>
                   <ArrowRight className="ml-2 h-4 w-4 opacity-80 transition-transform group-hover:translate-x-0.5" />
                 </Button>
               </div>
@@ -304,7 +326,7 @@ export default function Home() {
                     <div className="mb-1 relative">
                       <Image
                         src="/integriverse/logo.png"
-                        alt="Integriverse Logo"
+                        alt="Marketfy Logo"
                         width={260}
                         height={260}
                         className="relative z-10"
@@ -321,7 +343,7 @@ export default function Home() {
                         <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
                           <TrendingUp className="w-9 h-9 text-black/80" />
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">Google Trends</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">Trend Analysis</span>
                       </div>
                       
                       {/* TikTok */}
@@ -331,7 +353,7 @@ export default function Home() {
                             <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
                           </svg>
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">TikTok</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">TikTok Trends</span>
                       </div>
                       
                       {/* Facebook */}
@@ -339,7 +361,7 @@ export default function Home() {
                         <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
                           <BarChart3 className="w-9 h-9 text-black/80" />
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">Ad Library</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">Ad Research</span>
                       </div>
                     </div>
 
@@ -353,7 +375,7 @@ export default function Home() {
                         <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
                           <ShoppingBag className="w-9 h-9 text-black/80" />
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">Amazon</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">Amazon FBA</span>
                       </div>
                       
                       {/* Instagram */}
@@ -363,7 +385,7 @@ export default function Home() {
                             <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                           </svg>
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">Instagram</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">Influencer Data</span>
                       </div>
                       
                       {/* Pinterest */}
@@ -373,7 +395,7 @@ export default function Home() {
                             <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.094.379-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z" />
                           </svg>
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">Pinterest</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">Trend Discovery</span>
                       </div>
                     </div>
 
@@ -389,7 +411,7 @@ export default function Home() {
                             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                           </svg>
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">YouTube</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">Video Trends</span>
                       </div>
                       
                       {/* Shopify */}
@@ -399,7 +421,7 @@ export default function Home() {
                             <path d="M15.5 3.5c-.1-.7-.5-1.5-1.3-1.5-.1 0-.2 0-.3.1-.4.2-.5.5-.6.9v.2c-.1.6-.1 1.9-.7 2.1-.6.1-1.4-2-1.7-2.4-.1-.2-.3-.4-.5-.5-.1-.1-.3-.2-.5-.3-.1-.1-.3 0-.4 0-.9.4-1.9 1.3-2.1 2.9-.1.6-.2 1.1-.2 1.5-.6.1-1.2.2-1.7.4-1.1.3-1.1.3-1.2 1.2C4.1 8.9 3 19.8 3 19.8l10.8 2 5.9-1.3S16.3 6.7 16 5.3c-.1-.6-.3-.9-.5-1.8zm-2.9.9c-.3.1-.6.1-.9.1 0-.5.1-1.2.3-1.5.3.5.5 1 .6 1.4zM12 7.5l-.8 2.6s-.8-.4-1.8-.3c-1.5 0-1.5.9-1.5 1.1.1 1.1 2.9 1.4 3.1 4 .2 2.1-1.1 3.6-2.9 3.7-2.2.1-3.3-1.2-3.3-1.2l.5-1.8s1.2.8 2.1.7c.6 0 .8-.5.8-.9 0-1.4-2.4-1.4-2.6-3.6-.2-1.9 1.1-3.8 3.8-4 1-.1 1.6.3 1.6.3z" />
                           </svg>
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">Shopify</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">Dropshipping</span>
                       </div>
                       
                       {/* AI Analytics */}
@@ -407,7 +429,7 @@ export default function Home() {
                         <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
                           <Sparkles className="w-9 h-9 text-black/80" />
                         </div>
-                        <span className="text-xs text-gray-700 text-center font-medium">AI Analytics</span>
+                        <span className="text-xs text-gray-700 text-center font-medium">Market Analysis</span>
                       </div>
                     </div>
                   </div>
