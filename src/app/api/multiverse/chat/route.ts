@@ -328,7 +328,7 @@ export async function POST(req: Request) {
 
       
       const result = streamText({
-        model: google('gemini-1.5-pro-latest'),
+        model: google('gemini-2.5-pro-exp-03-25'),
         messages: uniqueMessages,
         temperature: 0.5, // Lower temperature for more deterministic responses
         maxTokens: 16000, // Reduce max tokens to avoid approaching limits
