@@ -1,11 +1,9 @@
 import { Send, StopCircle, Paperclip, X, Brain, Upload } from 'lucide-react';
-// useRouter and Dialog removed as they were unused
 import { ChatInputProps } from '../../types/chat';
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 
 export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileChange, status, reasoningMode, setReasoningMode }: ChatInputProps) {
-  // router removed as it was unused
   const [isFirstMessage, setIsFirstMessage] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropAreaRef = useRef<HTMLDivElement>(null);

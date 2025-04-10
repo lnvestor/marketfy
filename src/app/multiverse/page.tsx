@@ -80,7 +80,6 @@ function MultiverseContent() {
           }
         }
         
-        // Balance check removed
         
         // Check for session param in URL and load that session
         const sessionId = searchParams?.get('session');
@@ -287,7 +286,6 @@ function MultiverseContent() {
 
   return (
     <main className="h-screen flex overflow-hidden bg-white dark:bg-neutral-900">
-      {/* Credits Dialog removed */}
       
       {/* Sidebar */}
       <ChatSidebar
@@ -321,8 +319,6 @@ function MultiverseContent() {
         >
           <Menu className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
         </button>
-        
-        {/* Top right utilities removed */}
         
         {/* Main Content */}
         <div className="relative flex-1 flex flex-col h-[calc(100vh-64px)] overflow-hidden">

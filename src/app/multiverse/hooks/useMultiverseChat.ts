@@ -2,18 +2,15 @@ import { useChat } from '@ai-sdk/react';
 import { useCallback, useState, useEffect, useRef } from 'react';
 import { saveChatMessage, loadChatMessages } from '@/lib/chat-messages';
 import { createChatSession } from '@/lib/chat-sessions';
-import { trackTokenUsage } from '@/lib/user-token-usage';
 import { getAuthToken } from '@/lib/supabase';
-// Removed useAddons import since we removed that file
 import { Attachment, Message } from 'ai';
 
 export function useMultiverseChat(sessionId: string | null, onSessionUpdate: () => void) {
-  // Since we removed useAddons, create simple placeholder state
+  // Simple placeholder state for addon functionality
   const isEnabled = false;
   const enabledAddons: string[] = [];
   const connections = {};
-  // Add a no-op toggleAddon function
-  const toggleAddon = async () => { /* no-op */ };
+  const toggleAddon = async () => {};
   const [files, setFiles] = useState<FileList | null>(null);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(sessionId);
   const [error, setError] = useState<string | null>(null);
@@ -258,19 +255,12 @@ export function useMultiverseChat(sessionId: string | null, onSessionUpdate: () 
       if (metadata?.usage) {
         console.log('Usage information:', metadata.usage);
         
-        // Track token usage for billing if usage data is available
         if (metadata.usage.promptTokens && metadata.usage.completionTokens) {
-          try {
-            const promptTokens = metadata.usage.promptTokens;
-            const completionTokens = metadata.usage.completionTokens;
-            
-            // Track usage and deduct from user balance
-            const remainingBalance = await trackTokenUsage(promptTokens, completionTokens);
-            
-            console.log('Tracked token usage, remaining balance:', remainingBalance);
-          } catch (error) {
-            console.error('Failed to track token usage:', error);
-          }
+          console.log('Message tokens:', {
+            promptTokens: metadata.usage.promptTokens,
+            completionTokens: metadata.usage.completionTokens,
+            total: metadata.usage.promptTokens + metadata.usage.completionTokens
+          });
         }
       }
     }
@@ -299,7 +289,6 @@ export function useMultiverseChat(sessionId: string | null, onSessionUpdate: () 
         console.log(`Refreshing connection for ${addon}`);
         
         // If the addon is enabled but has no connection, toggle it off and on
-        // This will trigger the connection fetching logic in useAddons
         if (enabledAddons.includes(addon)) {
           // Toggle off
           await toggleAddon(addon);
