@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 // Also remove Supabase types
 import { Button } from "@/components/ui/button"
-import { ChevronRight, ArrowRight, Settings, Puzzle, Sparkles, Slack, GitMerge, Clock } from "lucide-react"
+import { ChevronRight, ArrowRight, Settings, Puzzle, Sparkles, Slack, GitMerge, Clock, TrendingUp, BarChart3, ShoppingBag } from "lucide-react"
 import Image from "next/image"
 import ClientOnly from "@/components/client-only"
 
@@ -60,32 +60,26 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="fixed top-0 inset-x-0 h-20 bg-white/80 backdrop-blur-xl border-b border-zinc-200 z-50">
+      <nav className="fixed top-0 inset-x-0 h-24 bg-white/80 backdrop-blur-xl z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <div className="relative">
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:8px_8px] rounded-xl"></div>
               <Image
                 src="/integriverse/logo.png"
                 alt="Integriverse Logo"
-                width={40}
-                height={40}
-                className="rounded-xl relative z-10"
+                width={100}
+                height={100}
+                className="rounded-xl"
               />
             </div>
-            <span className="text-xl font-medium text-black">
-              Integriverse
-            </span>
           </div>
-          <div className="flex items-center">
-            <Button
-              className="relative group overflow-hidden rounded-md bg-white text-black border border-zinc-200 hover:bg-gray-50 transition-all duration-300"
-              onClick={() => setShowAuth(true)}
-            >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:4px_4px] transition-opacity duration-300" />
-              <span className="relative z-10 px-3 text-black">App</span>
-            </Button>
-          </div>
+          <Button
+            className="rounded-md text-sm h-9 px-5 bg-black/80 backdrop-filter backdrop-blur-sm border border-white/10 text-white/90 hover:bg-black/70 hover:text-white transition-all duration-300 group flex items-center shadow-sm"
+            onClick={() => setShowAuth(true)}
+          >
+            <span className="font-normal">Get Started</span>
+            <ArrowRight className="ml-1.5 h-3.5 w-3.5 opacity-80 transition-transform group-hover:translate-x-0.5" />
+          </Button>
         </div>
       </nav>
 
@@ -252,7 +246,7 @@ export default function Home() {
         </div>
       )}
 
-      <main className="pt-20">
+      <main className="pt-24">
         {/* Hero Section */}
         <section className="relative min-h-[90vh] flex items-center">
           {/* Grid Background */}
@@ -265,58 +259,6 @@ export default function Home() {
             
             {/* Ambient Glow */}
             <div className="absolute inset-0" style={{ background: "radial-gradient(circle at center, rgba(0, 0, 0, 0.03) 0%, transparent 60%)" }} />
-            
-            {/* Minimal Node Animation */}
-            <svg className="w-full h-full absolute" xmlns="http://www.w3.org/2000/svg">
-              {/* Nodes */}
-              <circle cx="15%" cy="15%" r="1.2" fill="rgba(0, 0, 0, 0.15)" className="star" />
-              <circle cx="25%" cy="25%" r="0.8" fill="rgba(0, 0, 0, 0.12)" className="star" />
-              <circle cx="85%" cy="20%" r="1" fill="rgba(0, 0, 0, 0.10)" className="star" />
-              <circle cx="75%" cy="75%" r="1.5" fill="rgba(0, 0, 0, 0.12)" className="star" />
-              <circle cx="30%" cy="65%" r="0.9" fill="rgba(0, 0, 0, 0.10)" className="star" />
-              <circle cx="60%" cy="30%" r="1.1" fill="rgba(0, 0, 0, 0.12)" className="star" />
-              <circle cx="90%" cy="55%" r="0.7" fill="rgba(0, 0, 0, 0.15)" className="star" />
-              <circle cx="10%" cy="85%" r="1.3" fill="rgba(0, 0, 0, 0.10)" className="star" />
-              <circle cx="45%" cy="90%" r="0.8" fill="rgba(0, 0, 0, 0.12)" className="star" />
-              <circle cx="70%" cy="10%" r="1" fill="rgba(0, 0, 0, 0.15)" className="star" />
-              <circle cx="38%" cy="42%" r="1.2" fill="rgba(0, 0, 0, 0.10)" className="star" />
-              <circle cx="80%" cy="40%" r="0.9" fill="rgba(0, 0, 0, 0.12)" className="star" />
-              
-              {/* Connection Lines */}
-              <path d="M 20% 20% Q 35% 30%, 50% 40%" className="cosmic-connection" stroke="rgba(0, 0, 0, 0.08)" strokeWidth="1" fill="none" />
-              <path d="M 80% 15% Q 70% 30%, 60% 45%" className="cosmic-connection" stroke="rgba(0, 0, 0, 0.08)" strokeWidth="1" fill="none" />
-              <path d="M 30% 65% Q 40% 50%, 50% 40%" className="cosmic-connection" stroke="rgba(0, 0, 0, 0.08)" strokeWidth="1" fill="none" />
-              <path d="M 75% 75% Q 65% 60%, 55% 45%" className="cosmic-connection" stroke="rgba(0, 0, 0, 0.08)" strokeWidth="1" fill="none" />
-              <path d="M 45% 40% C 50% 50%, 55% 35%, 60% 45%" className="cosmic-connection" stroke="rgba(0, 0, 0, 0.08)" strokeWidth="1" fill="none" />
-              
-              {/* Main Node */}
-              <g className="cosmic-object">
-                <circle cx="50%" cy="40%" r="15" fill="rgba(0, 0, 0, 0.04)" className="cosmic-node" />
-                <circle cx="50%" cy="40%" r="25" fill="none" stroke="rgba(0, 0, 0, 0.05)" strokeWidth="1" />
-                <circle cx="50%" cy="40%" r="35" fill="none" stroke="rgba(0, 0, 0, 0.03)" strokeWidth="0.5" />
-              </g>
-              
-              {/* Secondary Nodes */}
-              <g className="cosmic-object" style={{animationDelay: "-5s"}}>
-                <circle cx="25%" cy="22%" r="8" fill="rgba(0, 0, 0, 0.03)" className="cosmic-node" />
-                <circle cx="25%" cy="22%" r="12" fill="none" stroke="rgba(0, 0, 0, 0.04)" strokeWidth="0.8" />
-              </g>
-              
-              <g className="cosmic-object" style={{animationDelay: "-10s"}}>
-                <circle cx="80%" cy="18%" r="10" fill="rgba(0, 0, 0, 0.03)" className="cosmic-node" />
-                <circle cx="80%" cy="18%" r="15" fill="none" stroke="rgba(0, 0, 0, 0.04)" strokeWidth="0.8" />
-              </g>
-              
-              <g className="cosmic-object" style={{animationDelay: "-15s"}}>
-                <circle cx="30%" cy="70%" r="9" fill="rgba(0, 0, 0, 0.03)" className="cosmic-node" />
-                <circle cx="30%" cy="70%" r="14" fill="none" stroke="rgba(0, 0, 0, 0.04)" strokeWidth="0.8" />
-              </g>
-              
-              <g className="cosmic-object" style={{animationDelay: "-7s"}}>
-                <circle cx="75%" cy="68%" r="7" fill="rgba(0, 0, 0, 0.03)" className="cosmic-node" />
-                <circle cx="75%" cy="68%" r="11" fill="none" stroke="rgba(0, 0, 0, 0.04)" strokeWidth="0.8" />
-              </g>
-            </svg>
           </div>
           
           {/* Subtle Glow Effects */}
@@ -325,577 +267,149 @@ export default function Home() {
           <div className="absolute right-40 bottom-40 w-48 h-48 bg-black/[0.015] rounded-full blur-3xl" />
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div className="flex flex-col lg:flex-row items-center gap-16">
-              <div className="flex-1 space-y-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-black text-sm font-medium">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-30"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
-                  </span>
-                  AI-Powered Integration Platform
-                </div>
-                
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold">
-                  <span className="text-black">
-                    Build integrations with
-                  </span>
-                  <br />
-                  <span className="text-black">
-                    AI assistance
-                  </span>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+              {/* Text Content - Left */}
+              <div className="flex-1 flex flex-col items-start text-left gap-8">
+                {/* Title */}
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-black">
+                  Build integrations with AI assistance
                 </h1>
-
+                
+                {/* Description */}
                 <p className="text-xl text-gray-600 max-w-2xl">
-                  Create powerful integrations effortlessly with our AI-powered platform. Connect your favorite tools and automate your workflows with intelligent assistance.
+                  Create powerful integrations effortlessly with our AI-powered platform. Connect your favorite tools and automate your workflows.
                 </p>
-
-                <div className="flex flex-wrap gap-4">
-                  <Button
-                    size="lg"
-                    className="rounded-md text-base h-12 px-8 bg-black text-white hover:opacity-90"
-                    onClick={() => setShowAuth(true)}
-                  >
-                    <span className="text-white">Sign In</span>
-                    <ArrowRight className="ml-2 h-5 w-5 text-white" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="rounded-md text-base h-12 px-8 border-zinc-200 bg-white hover:bg-white"
-                  >
-                    <span className="text-black">Watch Demo</span>
-                    <ChevronRight className="ml-2 h-5 w-5 text-black" />
-                  </Button>
-                </div>
-
-                <div className="pt-10 flex justify-center w-full">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl w-full">
-                    {/* App Card 1 */}
-                    <div className="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-zinc-800 p-6 transition-all duration-300 hover:-translate-y-1">
-                      <div className="absolute -bottom-16 -right-16 w-40 h-40 rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-                      
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-gray-100 dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700">
-                          <Puzzle className="w-7 h-7 text-black dark:text-white" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-black dark:text-white text-xl">100+</h3>
-                          <p className="text-gray-600 dark:text-gray-400 text-sm">Integrations</p>
-                        </div>
-                      </div>
-                      
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">Connect with popular platforms and build powerful automations across your tech stack.</p>
-                      
-                      <div className="absolute top-3 right-3 flex h-2 w-2">
-                        <span className="animate-ping absolute h-full w-full rounded-full bg-black dark:bg-white opacity-30"></span>
-                        <span className="relative rounded-full h-2 w-2 bg-black dark:bg-white"></span>
-                      </div>
+                
+                {/* Get Started Button */}
+                <Button
+                  size="lg"
+                  className="rounded-md text-base h-12 px-8 bg-black/90 backdrop-filter backdrop-blur-sm border border-white/10 text-white/90 hover:bg-black/80 hover:text-white transition-all duration-300 mt-4 group flex items-center shadow-sm"
+                  onClick={() => setShowAuth(true)}
+                >
+                  <span className="font-normal">Get Started</span>
+                  <ArrowRight className="ml-2 h-4 w-4 opacity-80 transition-transform group-hover:translate-x-0.5" />
+                </Button>
+              </div>
+              
+              {/* Logo with Product Research Icons - Right */}
+              <div className="flex-1 flex justify-center md:justify-end">
+                <div className="relative -mt-20">
+                  {/* Background Glow Effects */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 blur-xl opacity-80"></div>
+                  <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-gradient-to-r from-green-500/5 to-blue-500/5 blur-xl opacity-80"></div>
+                  <div className="absolute bottom-1/3 left-1/3 w-72 h-72 rounded-full bg-gradient-to-r from-pink-500/5 to-yellow-500/5 blur-xl opacity-80"></div>
+                
+                  <div className="flex flex-col items-center relative">
+                    {/* Main Logo - Closer to Grid */}
+                    <div className="mb-1 relative">
+                      <Image
+                        src="/integriverse/logo.png"
+                        alt="Integriverse Logo"
+                        width={260}
+                        height={260}
+                        className="relative z-10"
+                      />
                     </div>
                     
-                    {/* App Card 2 */}
-                    <div className="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-zinc-800 p-6 transition-all duration-300 hover:-translate-y-1">
-                      <div className="absolute -bottom-16 -right-16 w-40 h-40 rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+                    {/* Product Research Platform Icons - First Row */}
+                    <div className="grid grid-cols-3 gap-6 w-full max-w-lg mb-5 relative">
+                      {/* Wavy Glow for First Row */}
+                      <div className="absolute inset-0 -m-2 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 rounded-2xl opacity-80 blur-lg"></div>
                       
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-gray-100 dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700">
-                          <Settings className="w-7 h-7 text-black dark:text-white" />
+                      {/* Google Trends */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <TrendingUp className="w-9 h-9 text-black/80" />
                         </div>
-                        <div>
-                          <h3 className="font-medium text-black dark:text-white text-xl">1M+</h3>
-                          <p className="text-gray-600 dark:text-gray-400 text-sm">Automation Tasks</p>
-                        </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">Google Trends</span>
                       </div>
                       
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">Automate repetitive tasks and workflows with AI assistance to boost productivity.</p>
-                      
-                      <div className="absolute top-3 right-3 w-12 h-3 rounded-full bg-gray-200 dark:bg-neutral-700"></div>
-                    </div>
-                    
-                    {/* App Card 3 */}
-                    <div className="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-zinc-800 p-6 transition-all duration-300 hover:-translate-y-1">
-                      <div className="absolute -bottom-16 -right-16 w-40 h-40 rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-                      
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-gray-100 dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700">
-                          <Clock className="w-7 h-7 text-black dark:text-white" />
+                      {/* TikTok */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <svg viewBox="0 0 24 24" className="w-9 h-9" fill="black">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                          </svg>
                         </div>
-                        <div>
-                          <h3 className="font-medium text-black dark:text-white text-xl">10K+</h3>
-                          <p className="text-gray-600 dark:text-gray-400 text-sm">Hours Saved</p>
-                        </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">TikTok</span>
                       </div>
                       
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">Save thousands of hours with automated workflows and intelligent integrations.</p>
+                      {/* Facebook */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <BarChart3 className="w-9 h-9 text-black/80" />
+                        </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">Ad Library</span>
+                      </div>
+                    </div>
+
+                    {/* Second Row */}
+                    <div className="grid grid-cols-3 gap-6 w-full max-w-lg mb-5 relative">
+                      {/* Wavy Glow for Second Row */}
+                      <div className="absolute inset-0 -m-2 bg-gradient-to-r from-green-500/5 via-teal-500/5 to-green-500/5 rounded-2xl opacity-80 blur-lg"></div>
                       
-                      <div className="absolute top-3 right-3 flex space-x-1">
-                        <div className="h-3 w-3 rounded-full bg-gray-300 dark:bg-neutral-700"></div>
-                        <div className="h-3 w-3 rounded-full bg-gray-400 dark:bg-neutral-600"></div>
-                        <div className="h-3 w-3 rounded-full bg-gray-500 dark:bg-neutral-500"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex-1 flex justify-center items-center">
-                <div className="relative w-[400px] h-[400px] group mt-[-180px]">
-                  {/* Modern Grid Pattern */}
-                  <div className="absolute inset-0">
-                    {/* Base Grid */}
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:16px_16px] opacity-10" />
-                    {/* Larger Grid */}
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:80px_80px] opacity-20" />
-                    {/* Center Glow */}
-                    <div className="absolute inset-0" style={{ background: "radial-gradient(circle at center, rgba(0,0,0,0.03) 0%, transparent 70%)" }} />
-                  </div>
-                  
-                  {/* Logo with Animation */}
-                  <div className="relative w-full h-full transition-all duration-500 group-hover:scale-105">
-                    <Image
-                      src="/integriverse/logo.png"
-                      alt="Integriverse"
-                      fill
-                      className="object-contain"
-                      priority
-                      quality={100}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section - Dashboard Showcase */}
-        <section className="py-32 relative">
-          {/* Background Elements */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:24px_24px]" />
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Dashboard Showcase with SVG Annotations */}
-            <div className="relative flex flex-col items-center mb-32">
-              <div className="relative w-full transform perspective-1000 hover:-translate-y-2 transition-all duration-700 z-10">
-                <div className="absolute -inset-8 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-3xl blur-3xl" />
-                <div className="relative z-20 rounded-2xl overflow-hidden border border-zinc-200 shadow-2xl hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] transition-all duration-700">
-                  {/* Dashboard image */}
-                  <Image
-                    src="/integriverse/dashbaod.png"
-                    alt="Integriverse Dashboard"
-                    width={1200}
-                    height={700}
-                    className="w-full h-auto"
-                    priority
-                  />
-                  
-                  {/* Interactive overlay points */}
-                  <button 
-                    className="absolute z-30 group"
-                    style={{ top: '35%', left: '25%', transform: 'translate(-50%, -50%)' }}
-                  >
-                    <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform duration-200 shadow-lg">
-                      <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
-                    </div>
-                    <div className="opacity-0 group-hover:opacity-100 absolute bottom-7 left-3 transition-opacity duration-300 pointer-events-none">
-                      <div className="relative inline-block mb-2">
-                        <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:8px_8px] rounded-lg"></div>
-                        <div className="relative z-10 px-4 py-2 bg-white border border-zinc-200 rounded-lg shadow-sm">
-                          <span className="text-black font-medium block whitespace-nowrap">Ready Prompts</span>
-                          <span className="text-gray-600 text-xs block mt-1 max-w-[220px]">Pre-built templates for common tasks like querying saved searches or creating Celigo integrations.</span>
+                      {/* Amazon */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <ShoppingBag className="w-9 h-9 text-black/80" />
                         </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">Amazon</span>
                       </div>
-                    </div>
-                  </button>
-                  
-                  <button 
-                    className="absolute z-30 group"
-                    style={{ bottom: '5.5%', left: '76%', transform: 'translate(-50%, 50%)' }}
-                  >
-                    <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform duration-200 shadow-lg">
-                      <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
-                    </div>
-                    <div className="opacity-0 group-hover:opacity-100 absolute bottom-7 left-3 transition-opacity duration-300 pointer-events-none">
-                      <div className="relative inline-block mb-2">
-                        <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:8px_8px] rounded-lg"></div>
-                        <div className="relative z-10 px-4 py-2 bg-white border border-zinc-200 rounded-lg shadow-sm">
-                          <span className="text-black font-medium block whitespace-nowrap">Step-by-Step Reasoning</span>
-                          <span className="text-gray-600 text-xs block mt-1 max-w-[200px]">AI explains its thinking process, showing each logical step for transparent decision making.</span>
+                      
+                      {/* Instagram */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <svg viewBox="0 0 24 24" className="w-9 h-9" fill="black">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                          </svg>
                         </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">Instagram</span>
                       </div>
-                    </div>
-                  </button>
-                  
-                  <button 
-                    className="absolute z-30 group"
-                    style={{ top: '4%', right: '2%', transform: 'translate(-50%, -50%)' }}
-                  >
-                    <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform duration-200 shadow-lg">
-                      <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
-                    </div>
-                    <div className="opacity-0 group-hover:opacity-100 absolute top-7 right-3 transition-opacity duration-300 pointer-events-none">
-                      <div className="relative inline-block mt-2">
-                        <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:8px_8px] rounded-lg"></div>
-                        <div className="relative z-10 px-4 py-2 bg-white border border-zinc-200 rounded-lg shadow-sm">
-                          <span className="text-black font-medium block whitespace-nowrap">Connect Addons</span>
-                          <span className="text-gray-600 text-xs block mt-1 max-w-[220px]">Choose which integrations to chat with. Currently NetSuite and Celigo are available.</span>
+                      
+                      {/* Pinterest */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <svg viewBox="0 0 24 24" className="w-9 h-9" fill="black">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.094.379-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z" />
+                          </svg>
                         </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">Pinterest</span>
                       </div>
                     </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-            
-            {/* Feature List */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
-              <div className="relative group rounded-2xl p-6 bg-white border border-zinc-200 hover:shadow-lg transition-all duration-300">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:16px_16px] opacity-50" />
-                <div className="relative">
-                  <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
-                    <Settings className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-black mb-2">Intuitive Interface</h3>
-                  <p className="text-gray-600">Navigate our clean, minimalist dashboard with ease. Enjoy a user-friendly design with quick access to all features.</p>
-                </div>
-              </div>
-              
-              {/* Feature 2 */}
-              <div className="relative group rounded-2xl p-6 bg-white border border-zinc-200 hover:shadow-lg transition-all duration-300">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:16px_16px] opacity-50" />
-                <div className="relative">
-                  <div className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center mb-4">
-                    <Puzzle className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-black mb-2">Powerful Connections</h3>
-                  <p className="text-gray-600">Connect to NetSuite, Celigo, and over 100 other business applications with OAuth 2.0 integration.</p>
-                </div>
-              </div>
-              
-              {/* Feature 3 */}
-              <div className="relative group rounded-2xl p-6 bg-white border border-zinc-200 hover:shadow-lg transition-all duration-300">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:16px_16px] opacity-50" />
-                <div className="relative">
-                  <div className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center mb-4">
-                    <Sparkles className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-black mb-2">AI-Powered Building</h3>
-                  <p className="text-gray-600">Build custom integrations with AI assistance. Create, test, and deploy workflows without complex coding.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Integration Icons Carousel */}
-        <section className="py-24 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:24px_24px]" />
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-4 mb-16">
-              <h2 className="text-3xl font-bold text-black">
-                Supported Integrations
-              </h2>
-              <p className="text-lg text-gray-600">
-                Connect with your favorite tools and services
-              </p>
-            </div>
-
-            {/* Infinite Scroll Animation */}
-            <div className="relative overflow-hidden">
-              {/* Gradient Fades */}
-              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
-              
-              <div className="flex gap-8 animate-scroll hover:[animation-play-state:paused] group">
-                {/* First Set */}
-                <div className="flex gap-8 min-w-max">
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Image src="/logos/NetSuite.png" alt="NetSuite" width={40} height={40} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Image src="/logos/celigo.jpg" alt="Celigo" width={40} height={40} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Slack className="w-8 h-8 text-black/70 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <GitMerge className="w-8 h-8 text-black/70 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Image src="/logos/Claude.png" alt="Claude AI" width={40} height={40} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Image src="/logos/exa.jpg" alt="Exa" width={40} height={40} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Settings className="w-8 h-8 text-black/70 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Sparkles className="w-8 h-8 text-black/70 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                </div>
-                {/* Second Set */}
-                <div className="flex gap-8 min-w-max">
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Image src="/logos/NetSuite.png" alt="NetSuite" width={40} height={40} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Image src="/logos/celigo.jpg" alt="Celigo" width={40} height={40} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Slack className="w-8 h-8 text-black/70 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <GitMerge className="w-8 h-8 text-black/70 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Image src="/logos/Claude.png" alt="Claude AI" width={40} height={40} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Image src="/logos/exa.jpg" alt="Exa" width={40} height={40} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Settings className="w-8 h-8 text-black/70 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 border border-zinc-200 flex items-center justify-center">
-                    <Sparkles className="w-8 h-8 text-black/70 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Changelog Section */}
-        <section className="py-20 relative">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:24px_24px]" />
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-4 mb-16">
-              <h2 className="text-3xl font-bold text-black dark:text-white">
-                Latest Updates
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
-                New features and improvements
-              </p>
-            </div>
-
-            <div className="space-y-2 max-w-3xl mx-auto">
-              {/* Changelog Item 1 */}
-              <div className="group relative border border-zinc-200 rounded-md p-5 bg-white hover:bg-gray-50 transition-all duration-200">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 bg-white text-black group-hover:-translate-y-1 transition-all duration-300">
-                    <span className="text-xs font-medium">1.0.6</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="text-xs text-gray-500">March 5, 2025</div>
-                    <div className="px-1.5 py-0.5 bg-gray-100 rounded-sm text-[10px] font-medium text-black">NEW</div>
-                    <h3 className="text-sm font-medium text-black ml-1">Token usage tracking</h3>
-                  </div>
-                </div>
-                
-                <div className="relative overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-[400px]">
-                  <div className="space-y-2 pl-11 pt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div>
-                      <p className="text-xs font-medium text-black">Added</p>
-                      <ul className="mt-1 space-y-1">
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Detailed token usage tracking with cost estimation for Claude 3.7 Sonnet
-                        </li>
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Usage pill showing token counts and estimated costs
-                        </li>
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Visual breakdown of input/output tokens and costs
-                        </li>
-                      </ul>
+                    {/* Third Row */}
+                    <div className="grid grid-cols-3 gap-6 w-full max-w-lg relative">
+                      {/* Wavy Glow for Third Row */}
+                      <div className="absolute inset-0 -m-2 bg-gradient-to-r from-pink-500/5 via-orange-500/5 to-pink-500/5 rounded-2xl opacity-80 blur-lg"></div>
+                      
+                      {/* YouTube */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <svg viewBox="0 0 24 24" className="w-9 h-9" fill="black">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">YouTube</span>
+                      </div>
+                      
+                      {/* Shopify */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-9 h-9" fill="black">
+                            <path d="M15.5 3.5c-.1-.7-.5-1.5-1.3-1.5-.1 0-.2 0-.3.1-.4.2-.5.5-.6.9v.2c-.1.6-.1 1.9-.7 2.1-.6.1-1.4-2-1.7-2.4-.1-.2-.3-.4-.5-.5-.1-.1-.3-.2-.5-.3-.1-.1-.3 0-.4 0-.9.4-1.9 1.3-2.1 2.9-.1.6-.2 1.1-.2 1.5-.6.1-1.2.2-1.7.4-1.1.3-1.1.3-1.2 1.2C4.1 8.9 3 19.8 3 19.8l10.8 2 5.9-1.3S16.3 6.7 16 5.3c-.1-.6-.3-.9-.5-1.8zm-2.9.9c-.3.1-.6.1-.9.1 0-.5.1-1.2.3-1.5.3.5.5 1 .6 1.4zM12 7.5l-.8 2.6s-.8-.4-1.8-.3c-1.5 0-1.5.9-1.5 1.1.1 1.1 2.9 1.4 3.1 4 .2 2.1-1.1 3.6-2.9 3.7-2.2.1-3.3-1.2-3.3-1.2l.5-1.8s1.2.8 2.1.7c.6 0 .8-.5.8-.9 0-1.4-2.4-1.4-2.6-3.6-.2-1.9 1.1-3.8 3.8-4 1-.1 1.6.3 1.6.3z" />
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">Shopify</span>
+                      </div>
+                      
+                      {/* AI Analytics */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mb-2 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                          <Sparkles className="w-9 h-9 text-black/80" />
+                        </div>
+                        <span className="text-xs text-gray-700 text-center font-medium">AI Analytics</span>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs font-medium text-black">Changed</p>
-                      <ul className="mt-1 space-y-1">
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Modern UI themes with black/white design
-                        </li>
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Streamlined interfaces with consistent pill designs
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Changelog Item 2 */}
-              <div className="group relative border border-zinc-200 rounded-md p-5 bg-white hover:bg-gray-50 transition-all duration-200">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 bg-white text-black group-hover:-translate-y-1 transition-all duration-300">
-                    <span className="text-xs font-medium">1.0.5</span>
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-500">February 18, 2025</div>
-                    <h3 className="text-sm font-medium text-black">NetSuite integration enhancements</h3>
-                  </div>
-                </div>
-                
-                <div className="relative overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-[400px]">
-                  <div className="space-y-2 pl-11 pt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div>
-                      <p className="text-xs font-medium text-black">Added</p>
-                      <ul className="mt-1 space-y-1">
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Advanced SuiteQL support for complex queries
-                        </li>
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Improved saved search integration
-                        </li>
-                      </ul>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-black">Fixed</p>
-                      <ul className="mt-1 space-y-1">
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          OAuth token refresh issues
-                        </li>
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Error handling for rate-limited API calls
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Changelog Item 3 */}
-              <div className="group relative border border-zinc-200 rounded-md p-5 bg-white hover:bg-gray-50 transition-all duration-200">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 bg-white text-black group-hover:-translate-y-1 transition-all duration-300">
-                    <span className="text-xs font-medium">1.0.4</span>
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-500">January 22, 2025</div>
-                    <h3 className="text-sm font-medium text-black">AI multiverse interface</h3>
-                  </div>
-                </div>
-                
-                <div className="relative overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-[400px]">
-                  <div className="space-y-2 pl-11 pt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div>
-                      <p className="text-xs font-medium text-black">Added</p>
-                      <ul className="mt-1 space-y-1">
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          New multiverse chat interface for AI interactions
-                        </li>
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Step-by-step reasoning mode for complex operations
-                        </li>
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          PDF and image upload support for multimodal analysis
-                        </li>
-                      </ul>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-black">Improved</p>
-                      <ul className="mt-1 space-y-1">
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Chat message persistence across sessions
-                        </li>
-                        <li className="text-xs text-gray-600 flex items-center gap-1.5">
-                          <div className="h-1 w-1 rounded-full bg-black" />
-                          Response streaming for faster feedback
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="py-20 relative">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:24px_24px]" />
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-4 mb-16">
-              <h2 className="text-3xl font-bold text-black dark:text-white">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
-                Get answers to common questions about Integriverse
-              </p>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2 max-w-5xl mx-auto">
-              {/* FAQ Item 1 */}
-              <div className="group relative border border-zinc-200 rounded-md hover:bg-gray-50 transition-all duration-200">
-                <div className="p-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-black">What platforms can I integrate with?</h3>
-                    <div className="h-4 w-4 rounded-full border border-zinc-200 flex items-center justify-center group-hover:border-black transition-all duration-300">
-                      <div className="h-1.5 w-1.5 rounded-full bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                  </div>
-                  <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-[200px]">
-                    <p className="mt-2 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-all duration-300">Integriverse supports NetSuite, Celigo, and over 100 other business applications. Our AI-powered integration tools simplify connecting to APIs and building workflows across your tech stack.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* FAQ Item 2 */}
-              <div className="group relative border border-zinc-200 rounded-md hover:bg-gray-50 transition-all duration-200">
-                <div className="p-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-black">How does the AI assistance work?</h3>
-                    <div className="h-4 w-4 rounded-full border border-zinc-200 flex items-center justify-center group-hover:border-black transition-all duration-300">
-                      <div className="h-1.5 w-1.5 rounded-full bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                  </div>
-                  <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-[200px]">
-                    <p className="mt-2 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-all duration-300">Our AI uses Claude 3.7 Sonnet to help you build integrations through natural language. Simply describe what you want to accomplish, and the AI will assist with code generation, API queries, and troubleshooting.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* FAQ Item 3 */}
-              <div className="group relative border border-zinc-200 rounded-md hover:bg-gray-50 transition-all duration-200">
-                <div className="p-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-black">Is my data secure?</h3>
-                    <div className="h-4 w-4 rounded-full border border-zinc-200 flex items-center justify-center group-hover:border-black transition-all duration-300">
-                      <div className="h-1.5 w-1.5 rounded-full bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                  </div>
-                  <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-[200px]">
-                    <p className="mt-2 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-all duration-300">Yes, we prioritize data security. We don&apos;t store your data, use end-to-end encryption, and comply with industry standards. All integrations run within your secure environment.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* FAQ Item 4 */}
-              <div className="group relative border border-zinc-200 rounded-md hover:bg-gray-50 transition-all duration-200">
-                <div className="p-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-black">How is token usage billed?</h3>
-                    <div className="h-4 w-4 rounded-full border border-zinc-200 flex items-center justify-center group-hover:border-black transition-all duration-300">
-                      <div className="h-1.5 w-1.5 rounded-full bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                  </div>
-                  <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-[200px]">
-                    <p className="mt-2 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-all duration-300">Token usage is tracked and billed based on actual consumption. The platform provides detailed metrics showing input/output tokens and estimated costs. Pre-paid credits are available for enterprise accounts.</p>
                   </div>
                 </div>
               </div>
