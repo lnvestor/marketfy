@@ -215,12 +215,12 @@ export function ChatMessages({ messages, isLoading, error, onRetry }: ChatMessag
       {timelineCollapsed && (
         <button
           onClick={() => setTimelineCollapsed(false)}
-          className="fixed right-4 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-zinc-800 rounded-full shadow-md transition-all hover:shadow-lg z-20"
+          className="fixed right-4 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-zinc-800 rounded-full shadow-md transition-all hover:shadow-lg z-20"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            width="16" 
-            height="16" 
+            width="20" 
+            height="20" 
             viewBox="0 0 24 24" 
             fill="none" 
             stroke="currentColor" 
@@ -228,7 +228,7 @@ export function ChatMessages({ messages, isLoading, error, onRetry }: ChatMessag
             strokeLinecap="round" 
             strokeLinejoin="round"
             className={timelineItems.length > 0 
-              ? "text-black dark:text-white animate-wiggle" 
+              ? "text-black dark:text-white animate-wiggle-fast" 
               : "text-gray-400 dark:text-gray-600"
             }
           >

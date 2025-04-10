@@ -138,6 +138,10 @@ const config = {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
         },
+        "spin-fast": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
         "collapsible-down": {
           from: { height: "0" },
           to: { height: "var(--radix-collapsible-content-height)" },
@@ -203,6 +207,10 @@ const config = {
           "0%, 100%": { transform: "rotate(-5deg)" },
           "50%": { transform: "rotate(5deg)" },
         },
+        "wiggle-fast": {
+          "0%, 100%": { transform: "rotate(-8deg)" },
+          "50%": { transform: "rotate(8deg)" },
+        },
         shine: {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
@@ -214,6 +222,7 @@ const config = {
         "collapsible-down": "collapsible-down 0.2s ease-out",
         "collapsible-up": "collapsible-up 0.2s ease-out",
         "spin-slow": "spin-slow 1.2s linear infinite",
+        "spin-fast": "spin-fast 0.5s linear infinite",
         "fadeIn": "fadeIn 1.5s ease-in-out forwards 0.5s",
         "ellipsis": "ellipsis 1.5s infinite",
         "loadingLine": "loadingLine 1.8s ease-in-out infinite alternate",
@@ -223,6 +232,7 @@ const config = {
         scroll: "scroll 30s linear infinite",
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         wiggle: "wiggle 1.5s ease-in-out infinite",
+        "wiggle-fast": "wiggle-fast 0.8s ease-in-out infinite",
         shine: "shine 3s ease-in-out infinite",
       },
       backgroundImage: {

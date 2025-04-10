@@ -177,110 +177,122 @@ export function ChatMessage({ message, isLoading }: ChatMessageProps) {
       className="flex flex-col items-start w-full"
       data-stable-id={stableId}
     >
-      {/* Minimalist sender label with better visibility */}
-      <div className="flex items-center gap-2 mb-0.5">
-        {isUser ? (
+      {/* User messages with small "you" label */}
+      {isUser && (
+        <div className="flex items-center gap-2 mb-0.5">
           <div className="text-xs text-gray-500 dark:text-gray-400">
             you
           </div>
-        ) : (
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            assistant
-          </div>
-        )}
-        {isLoading && <LoadingDots />}
-      </div>
+          {isLoading && <LoadingDots />}
+        </div>
+      )}
       
-      {/* Ultra-minimalist message container with subtle styling */}
-      <div className={`
-        group relative px-3 py-1.5 mt-0.5
-        ${isUser ? 'bg-gray-50/70 dark:bg-neutral-900/50' : 'bg-gray-50/40 dark:bg-neutral-900/30'} 
-        ${isUser ? 'border border-gray-100/50 dark:border-neutral-800/50' : 'border border-gray-100/30 dark:border-neutral-800/30'}
-        ${isUser ? 'text-black dark:text-white' : 'text-black dark:text-white'}
-        ${isShortMessage ? 'inline-block max-w-max rounded-md' : 'w-[98%] rounded-md'}
-      `}>
-        {/* Reasoning indicator with larger icon */}
-        {!isUser && hasReasoning && (
-          <div className="absolute -top-1 -right-1">
-            <Brain className="h-3.5 w-3.5 text-gray-500" />
+      {/* Special layout for assistant messages with star on the left */}
+      <div className={isUser ? "" : "flex items-start gap-2 w-full"}>
+        {/* Star icon for assistant messages */}
+        {!isUser && (
+          <div className="flex-shrink-0 mt-2 flex items-center">
+            <img 
+              src="/integriverse/star.png" 
+              alt="Assistant" 
+              className="h-6 w-6 animate-spin-fast" 
+            />
+            {isLoading && <div className="ml-1"><LoadingDots /></div>}
           </div>
         )}
         
-        <div>
-          {/* Regular markdown content with simplified typography */}
-          <div className={`prose prose-sm text-current ${isShortMessage ? 'w-auto' : 'max-w-none'}`}>
-            <MemoizedMarkdown content={message.content} id={message.id || stableId} />
-          </div>
-
-          {/* Reasoning content section */}
-          {hasReasoning && (
-            <>
-              {/* First try from thinking tags */}
-              {message.content && /<thinking>([\s\S]*?)<\/thinking>/.test(message.content) ? (
-                <ReasoningSection 
-                  key="reasoning-from-thinking"
-                  content={(() => {
-                    if (!message.content) return '';
-                    const match = message.content.match(/<thinking>([\s\S]*?)<\/thinking>/);
-                    return match && match[1] ? match[1].trim() : '';
-                  })()}
-                />
-              ) : message.parts?.some(part => part.type === 'reasoning') ? (
-                /* Then try message parts */
-                <ReasoningSection 
-                  key="reasoning-from-parts" 
-                  content={message.parts
-                    .filter(part => part.type === 'reasoning')
-                    .flatMap(part => part.type === 'reasoning' && part.details ? 
-                      part.details.map(d => d.type === 'text' ? d.text : '') : [])
-                    .join('\n')
-                  }
-                />
-              ) : message.annotations?.some(anno => anno.type === 'reasoning') ? (
-                /* Try annotations */
-                <ReasoningSection 
-                  key="reasoning-from-annotations" 
-                  content={message.annotations
-                    .filter(anno => anno.type === 'reasoning')
-                    .map(anno => anno.content || '')
-                    .join('\n')
-                  }
-                />
-              ) : ('reasoning' in message) ? (
-                /* Finally try direct reasoning field */
-                <ReasoningSection 
-                  key="reasoning-from-field" 
-                  content={(message as {reasoning: string}).reasoning}
-                />
-              ) : null}
-            </>
+        {/* Message container with subtle styling */}
+        <div className={`
+          group relative px-3 py-1.5 ${isUser ? 'mt-0.5' : 'mt-0'}
+          ${isUser ? 'bg-gray-50/70 dark:bg-neutral-900/50' : 'bg-gray-50/40 dark:bg-neutral-900/30'} 
+          ${isUser ? 'border border-gray-100/50 dark:border-neutral-800/50' : 'border border-gray-100/30 dark:border-neutral-800/30'}
+          ${isUser ? 'text-black dark:text-white' : 'text-black dark:text-white'}
+          ${isUser ? (isShortMessage ? 'inline-block max-w-max rounded-md' : 'w-[98%] rounded-md') : 'flex-grow rounded-md'}
+          selection:bg-blue-200 dark:selection:bg-blue-800/60 selection:text-black dark:selection:text-white
+        `}>
+          {/* Reasoning indicator with larger icon */}
+          {!isUser && hasReasoning && (
+            <div className="absolute -top-1 -right-1">
+              <Brain className="h-3.5 w-3.5 text-gray-500" />
+            </div>
           )}
+          
+          <div>
+            {/* Regular markdown content with simplified typography */}
+            <div className={`prose prose-sm text-current ${isShortMessage ? 'w-auto' : 'max-w-none'}`}>
+              <MemoizedMarkdown content={message.content} id={message.id || stableId} />
+            </div>
 
-          {/* Attachments */}
-          {message.experimental_attachments && (
-            <Attachments attachments={message.experimental_attachments} />
-          )}
-
-          {/* Minimalist Message Actions with slightly larger icons */}
-          <div className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-            <button
-              onClick={handleCopy}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-sm transition-colors"
-            >
-              {copied ? (
-                <Check className="h-3.5 w-3.5 text-gray-500" />
-              ) : (
-                <Copy className="h-3.5 w-3.5 text-gray-500" />
-              )}
-            </button>
-            {!isUser && (
-              <button
-                onClick={handleLike}
-                className={`p-1 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-sm transition-colors ${liked ? 'text-gray-700' : 'text-gray-500'}`}
-              >
-                <ThumbsUp className="h-3.5 w-3.5" />
-              </button>
+            {/* Reasoning content section */}
+            {hasReasoning && (
+              <>
+                {/* First try from thinking tags */}
+                {message.content && /<thinking>([\s\S]*?)<\/thinking>/.test(message.content) ? (
+                  <ReasoningSection 
+                    key="reasoning-from-thinking"
+                    content={(() => {
+                      if (!message.content) return '';
+                      const match = message.content.match(/<thinking>([\s\S]*?)<\/thinking>/);
+                      return match && match[1] ? match[1].trim() : '';
+                    })()}
+                  />
+                ) : message.parts?.some(part => part.type === 'reasoning') ? (
+                  /* Then try message parts */
+                  <ReasoningSection 
+                    key="reasoning-from-parts" 
+                    content={message.parts
+                      .filter(part => part.type === 'reasoning')
+                      .flatMap(part => part.type === 'reasoning' && part.details ? 
+                        part.details.map(d => d.type === 'text' ? d.text : '') : [])
+                      .join('\n')
+                    }
+                  />
+                ) : message.annotations?.some(anno => anno.type === 'reasoning') ? (
+                  /* Try annotations */
+                  <ReasoningSection 
+                    key="reasoning-from-annotations" 
+                    content={message.annotations
+                      .filter(anno => anno.type === 'reasoning')
+                      .map(anno => anno.content || '')
+                      .join('\n')
+                    }
+                  />
+                ) : ('reasoning' in message) ? (
+                  /* Finally try direct reasoning field */
+                  <ReasoningSection 
+                    key="reasoning-from-field" 
+                    content={(message as {reasoning: string}).reasoning}
+                  />
+                ) : null}
+              </>
             )}
+
+            {/* Attachments */}
+            {message.experimental_attachments && (
+              <Attachments attachments={message.experimental_attachments} />
+            )}
+
+            {/* Minimalist Message Actions with slightly larger icons */}
+            <div className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+              <button
+                onClick={handleCopy}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-sm transition-colors"
+              >
+                {copied ? (
+                  <Check className="h-3.5 w-3.5 text-gray-500" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5 text-gray-500" />
+                )}
+              </button>
+              {!isUser && (
+                <button
+                  onClick={handleLike}
+                  className={`p-1 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-sm transition-colors ${liked ? 'text-gray-700' : 'text-gray-500'}`}
+                >
+                  <ThumbsUp className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

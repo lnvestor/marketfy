@@ -183,7 +183,7 @@ export const MemoizedMarkdown = memo(
     const cleanedContent = content.replace(/<thinking>[\s\S]*?<\/thinking>/g, '');
     
     return (
-      <div className="text-black dark:text-white">
+      <div className="text-black dark:text-white selection:bg-blue-200 dark:selection:bg-blue-800/60 selection:text-black dark:selection:text-white">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
@@ -247,7 +247,7 @@ export const MemoizedMarkdown = memo(
               
               // Code block with better visibility
               return (
-                <pre className="bg-gray-100 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-sm px-3 py-2 overflow-auto text-gray-800 dark:text-gray-200 text-sm my-3 font-mono">
+                <pre className="bg-gray-100 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-sm px-3 py-2 overflow-auto text-gray-800 dark:text-gray-200 text-sm my-3 font-mono selection:bg-blue-300 dark:selection:bg-blue-700/50">
                   {children}
                 </pre>
               );
@@ -371,7 +371,7 @@ export const MemoizedMarkdown = memo(
                   {/* Responsive table container with max height and scrolling */}
                   <div className="border border-gray-200 dark:border-neutral-700 rounded-sm overflow-hidden">
                     <div className="overflow-auto max-h-[400px] scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-neutral-700">
-                      <table className="min-w-full border-collapse text-xs">
+                      <table className="min-w-full border-collapse text-xs selection:bg-blue-200 dark:selection:bg-blue-700/50 selection:text-black dark:selection:text-white">
                         {children}
                       </table>
                     </div>
