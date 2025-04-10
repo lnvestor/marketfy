@@ -853,6 +853,49 @@ body {
 
 
 
+/* Grid Icon Animation */
+@keyframes float-wave {
+  0% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(3px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.platform-icon {
+  animation: float-wave 8s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+}
+
+.platform-icon:nth-child(3n+1) {
+  animation-delay: 0s;
+}
+
+.platform-icon:nth-child(3n+2) {
+  animation-delay: 1.5s;
+}
+
+.platform-icon:nth-child(3n+3) {
+  animation-delay: 3s;
+}
+
+.platform-icon:nth-child(n+4) {
+  animation-duration: 10s;
+}
+
+.platform-icon:nth-child(n+7) {
+  animation-duration: 12s;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
