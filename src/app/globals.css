@@ -4,6 +4,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent scrolling beyond page bounds */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Hide scrollbar but allow scrolling */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 @keyframes glow {
   0%, 100% {
     box-shadow: 0 0 5px theme('colors.purple.500' / 20%);
