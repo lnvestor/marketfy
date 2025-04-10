@@ -323,7 +323,7 @@ export function ChatSidebar({
         {/* Collapse Button (Outside Sidebar) */}
         <button
           onClick={onToggleCollapse}
-          className="h-8 w-8 absolute -right-4 top-1/2 transform -translate-y-1/2 bg-white border border-emerald-100 rounded-full flex items-center justify-center text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors shadow-sm z-50"
+          className="h-8 w-8 absolute -right-4 top-1/2 transform -translate-y-1/2 bg-white border border-gray-200 rounded-full flex items-center justify-center text-black hover:text-black hover:bg-gray-50 transition-colors shadow-sm z-50"
         >
           <PanelLeftClose className={`h-3.5 w-3.5 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
         </button>
