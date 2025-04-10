@@ -4,11 +4,16 @@ import { saveChatMessage, loadChatMessages } from '@/lib/chat-messages';
 import { createChatSession } from '@/lib/chat-sessions';
 import { trackTokenUsage } from '@/lib/user-token-usage';
 import { getAuthToken } from '@/lib/supabase';
-import { useAddons } from './useAddons';
+// Removed useAddons import since we removed that file
 import { Attachment, Message } from 'ai';
 
 export function useMultiverseChat(sessionId: string | null, onSessionUpdate: () => void) {
-  const { isEnabled, enabledAddons, connections, toggleAddon } = useAddons();
+  // Since we removed useAddons, create simple placeholder state
+  const isEnabled = false;
+  const enabledAddons: string[] = [];
+  const connections = {};
+  // Add a no-op toggleAddon function
+  const toggleAddon = async () => { /* no-op */ };
   const [files, setFiles] = useState<FileList | null>(null);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(sessionId);
   const [error, setError] = useState<string | null>(null);

@@ -99,8 +99,8 @@ export async function POST(req: NextRequest) {
       .from('chat_sessions')
       .insert({
         user_id: user.id,
-        name,
-        is_active: true // Add the is_active field
+        name
+        // Removed is_active field as it doesn't exist in the database schema
       })
       .select()
       .single();

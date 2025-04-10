@@ -6,10 +6,10 @@ import { supabase } from "@/lib/supabase"
 import { Menu, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { ChatSidebar } from "@/app/multiverse/components/layout/ChatSidebar"
-import { AddonToggle } from "@/app/multiverse/components/layout/AddonToggle"
+// AddonToggle import removed
 import { UsagePill } from "@/app/multiverse/components/layout/UsagePill"
 import { BalancePill } from "@/app/multiverse/components/layout/BalancePill"
-import { FeedbackButton } from "@/app/multiverse/components/layout/FeedbackButton"
+// FeedbackButton import removed as the component doesn't exist
 import { loadChatSessions } from '@/lib/chat-sessions'
 
 interface Profile {
@@ -367,10 +367,9 @@ export default function SettingsPage() {
         
         {/* Top right utilities */}
         <div className="absolute top-0 right-0 h-16 z-10 flex items-center justify-end px-4 gap-2">
-          <FeedbackButton sessionId={null} />
+          {/* FeedbackButton removed */}
           <BalancePill />
           <UsagePill messages={[]} sessionId={null} />
-          <AddonToggle />
         </div>
       
         {/* Main Content */}

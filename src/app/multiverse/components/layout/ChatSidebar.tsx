@@ -31,8 +31,8 @@ export function ChatSidebar({
   const [userName, setUserName] = useState<string>('');
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  // State to track if user is admin
-  const [isAdmin, setIsAdmin] = useState(false);
+  // State to track if user is admin - removed isAdmin as it was unused
+  const [, setIsAdmin] = useState(false);
 
   // Fetch user profile on mount
   useEffect(() => {

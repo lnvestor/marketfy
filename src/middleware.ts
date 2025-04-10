@@ -39,7 +39,7 @@ export async function middleware(request: NextRequest) {
   await supabase.auth.getSession();
 
   // For protected routes, verify user is authenticated
-  const protectedPaths = ['/multiverse', '/addons', '/settings', '/connections', '/dashboard'];
+  const protectedPaths = ['/multiverse', '/settings'];
   const url = new URL(request.url);
   
   if (protectedPaths.some(path => url.pathname.startsWith(path))) {
@@ -60,9 +60,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/multiverse/:path*',
-    '/addons/:path*',
     '/settings/:path*',
-    '/connections/:path*',
-    '/dashboard/:path*',
   ],
 };
