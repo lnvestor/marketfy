@@ -1,0 +1,21 @@
+<![CDATA[<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.05">
+    <path d="M100 0H0V100H100V0Z" fill="url(#paint0_radial_0_1)"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H1V100H0V0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M20 0H21V100H20V0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M40 0H41V100H40V0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M60 0H61V100H60V0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M80 0H81V100H80V0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0V1H100V0H0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 20V21H100V20H0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 40V41H100V40H0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 60V61H100V60H0Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 80V81H100V80H0Z" fill="white"/>
+  </g>
+  <defs>
+    <radialGradient id="paint0_radial_0_1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(50 50) rotate(90) scale(50)">
+      <stop stop-color="white"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>]]>

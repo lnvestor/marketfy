@@ -1,39 +1,69 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Header } from "@/components/layout/header";
-import { AuthProvider } from "@/lib/auth-context";
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import WarningSupressor from "@/components/warning-suppressor"
+import Script from 'next/script'
+import { Toaster } from "@/components/ui/toaster"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Marketfy",
-  description: "Your marketplace for everything",
-};
+  title: "Integriverse | Connect Beyond Boundaries",
+  description: "Intelligent integration assistant for NetSuite and Celigo",
+  metadataBase: new URL("https://integriverse.io"),
+  icons: {
+    icon: { url: "/favicon.ico", type: "image/x-icon" }
+  }
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
-      >
-        <AuthProvider>
-          <Header />
-          <main className="flex-1 overflow-x-hidden">{children}</main>
-        </AuthProvider>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Security script to block Supabase direct API calls */}
+        <Script id="supabase-security" strategy="beforeInteractive">
+          {`
+            (function() {
+              // Block direct API calls to Supabase from the client
+              const originalFetch = window.fetch;
+              window.fetch = function(url, options) {
+                // Convert URL object to string if needed
+                const urlString = url.toString ? url.toString() : url;
+                
+                // Block any direct calls to Supabase auth API
+                if (urlString.includes('supabase.co/auth')) {
+                  console.warn('Direct Supabase authentication API calls are blocked for security');
+                  return Promise.resolve(new Response(JSON.stringify({
+                    error: 'Direct Supabase API calls are disabled'
+                  }), { status: 403 }));
+                }
+                
+                // Allow the request to proceed
+                return originalFetch.apply(this, arguments);
+              };
+            })();
+          `}
+        </Script>
+      </head>
+      <body className={inter.className}>
+        {/* Component to suppress hydration warnings */}
+        <WarningSupressor />
+        
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

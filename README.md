@@ -1,69 +1,157 @@
-# Marketfy
+# AI Interface
 
-Marketfy is an AI-powered product research tool for dropshippers, e-commerce sellers, and Amazon FBA sellers. The platform helps users find profitable products to sell online, analyze market trends, and make data-driven business decisions.
+[![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](https://github.com/drisstalainte/ai-interface/releases)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-14.0-000000.svg?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.0-38B2AC.svg?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-## Features
+AI Interface is an intelligent productivity platform that seamlessly connects enterprise systems with AI capabilities. Integrate with NetSuite, Celigo, and other business platforms while leveraging generative AI for natural language interactions.
 
-- **AI Assistant**: Chat with our AI to get product recommendations, market insights, and sales strategies
-- **Market Analysis**: Analyze products and niches to identify trends and opportunities
-- **Product Research**: Find high-potential products with validated market demand
-- **Tool Integration**: Use specialized tools for data-driven insights
+![AI Interface Screenshot](./public/integriverse/screenshot.png)
 
-## Tech Stack
+## 🚀 What's New in v1.0.6
 
-- [Next.js 14](https://nextjs.org/) - React framework
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
-- [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [Supabase](https://supabase.com/) - Authentication and database
-- [Google Generative AI](https://ai.google.dev/) - AI capabilities through Gemini models
-- [AI SDK](https://ai.vercel.ai) - For AI tool integration and chat interfaces
+### Added
+- 📊 **Token usage tracking**: Detailed tracking with cost estimation for Claude 3.7 Sonnet
+- 💰 **Usage pill**: New UI component showing token counts and estimated costs
+- 🔍 **Detailed breakdown**: View input/output tokens and costs with visual breakdown
 
-## Getting Started
+### Changed
+- 🎨 **Modern UI themes**: Refreshed addon pill with contemporary teal/emerald design
+- 💄 **Streamlined interfaces**: Consistent pill designs throughout the app
 
-### Prerequisites
+### Fixed
+- 🐛 Fixed duplicate message saving in chat history
+- 📈 Added persistent token usage data to database
 
-- Node.js 18+ 
-- A Google AI API key (get one at [makersuite.google.com](https://makersuite.google.com/app/apikey))
+[View full changelog →](CHANGELOG.md)
 
-### Environment Setup
+## ⚙️ Environment Setup
 
-1. Create or update your `.env.local` file with the following:
+### NetSuite OAuth Configuration
 
-```
-# Supabase credentials
+1. Obtain OAuth Credentials from NetSuite:
+   - Log in to your NetSuite account
+   - Go to Setup > Integration > Integration Management > Manage Integrations
+   - Create a new Integration record with the following settings:
+     * Name: AI Interface
+     * OAuth 2.0 Client Credentials: Check this box
+     * Callback URL: `http://localhost:3000/auth/netsuite/callback` (development)
+     * Application ID: Will be generated automatically
+     * Consumer Key/Client ID: Will be generated automatically
+     * Consumer Secret/Client Secret: Will be generated automatically
+
+2. Configure Environment Variables:
+   Copy the `.env.local.example` file to `.env.local` and update the following variables:
+   ```
+   NETSUITE_CLIENT_ID=your_client_id_here      # Consumer Key/Client ID from NetSuite
+   NETSUITE_CLIENT_SECRET=your_client_secret_here  # Consumer Secret/Client Secret from NetSuite
+   ```
+
+3. Important Security Notes:
+   - Never commit `.env.local` to version control
+   - Keep your Client ID and Secret secure
+   - Use different Integration records for development and production
+   - Update the callback URL in production to match your deployed domain
+
+4. Troubleshooting:
+   - Ensure the Integration record is enabled in NetSuite
+   - Verify the callback URL matches exactly
+   - Check that the role has appropriate permissions
+   - Ensure the account ID is correct when connecting
+
+### Required Environment Variables
+
+```env
+# NetSuite Configuration
+NETSUITE_CLIENT_ID=your_client_id_here
+NETSUITE_CLIENT_SECRET=your_client_secret_here
+NETSUITE_ACCOUNT_ID=your_netsuite_account_id
+NEXT_PUBLIC_NETSUITE_REDIRECT_URI=http://localhost:3000/auth/netsuite/callback
+
+# SuiteQL Configuration
+NETSUITE_SUITEQL_SCRIPT_ID=customscript_integrivers_suiteql_api
+NETSUITE_SUITEQL_DEPLOY_ID=customdeploy1
+
+# Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-# Google Generative AI
-GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key
+# AI Provider Configuration
+ANTHROPIC_API_KEY=your_anthropic_api_key
 ```
 
-### Running the Project
+## 🚀 Getting Started
 
-```bash
-# Install dependencies
-npm install
+### Prerequisites
 
-# Run the development server
-npm run dev
-```
+- Node.js 18.17.0 or later
+- npm or yarn
+- Supabase account
+- NetSuite account with integration access
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+### Installation
 
-## Project Structure
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/ai-interface.git
+   cd ai-interface
+   ```
 
-- `src/app` - Next.js app router pages and API routes
-- `src/components` - Reusable UI components
-- `src/lib` - Utility functions, AI config, and tools
-- `src/lib/tools` - AI tools for product research and market analysis
+2. Install dependencies
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-## AI Tools
+3. Set up environment variables by copying the example file
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your credentials
+   ```
 
-The application integrates with Google's Gemini models through the AI SDK, providing:
+4. Start the development server
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-- **Chat Interface**: Real-time streaming responses
-- **Product Search**: Find products matching specific criteria
-- **Market Analysis**: Get insights on product markets and trends
-- **Trend Analysis**: Track product popularity over time
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can extend the available tools by adding new functions to the `src/lib/tools` directory.
+## 🧩 Features
+
+- **NetSuite Integration**: Connect to your NetSuite environment
+  - OAuth 2.0 authentication flow
+  - Saved Search tool for complex record retrieval
+  - SuiteQL tool for SQL-like queries against NetSuite data
+  
+- **Celigo Integration**: Manage Celigo integrations through natural language
+  - Connection management
+  - Import and export configuration
+  - Flow management
+
+- **AI Chat Interface**: Natural language interactions with integrated systems
+  - Context-aware conversation with tools
+  - Markdown rendering with syntax highlighting
+  - Table formatting with CSV export
+
+## 📖 Documentation
+
+For more detailed information about using the platform, refer to our [documentation](docs/).
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- [Changelog](CHANGELOG.md)
+- [Project Roadmap](PROJECT.md)
+- [NetSuite Developer Resources](https://developer.oracle.com/netsuite)
