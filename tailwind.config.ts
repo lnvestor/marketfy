@@ -134,6 +134,10 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
         "collapsible-down": {
           from: { height: "0" },
           to: { height: "var(--radix-collapsible-content-height)" },
@@ -209,6 +213,7 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "collapsible-down": "collapsible-down 0.2s ease-out",
         "collapsible-up": "collapsible-up 0.2s ease-out",
+        "spin-slow": "spin-slow 1.2s linear infinite",
         "fadeIn": "fadeIn 1.5s ease-in-out forwards 0.5s",
         "ellipsis": "ellipsis 1.5s infinite",
         "loadingLine": "loadingLine 1.8s ease-in-out infinite alternate",

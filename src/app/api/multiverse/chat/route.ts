@@ -312,22 +312,27 @@ export async function POST(req: Request) {
     
     const data = new StreamData();
     let currentText = '';
-    const toolStates = new Map<string, { status: string; timestamp: number }>();
+    const toolStates = new Map<string, { 
+      status: string; 
+      timestamp: number;
+      argsText?: string; // Track tool call args for streaming
+      isStreaming?: boolean; // Flag for streaming tool calls
+    }>();
+    
+    // Generate unique message ID for this response
+    const responseMessageId = `msg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-    try {
-      // Filter out duplicate messages
-      interface ChatMessage {
-        content: string;
-        role: string;
-      }
+    // Filter out duplicate messages
+    interface ChatMessage {
+      content: string;
+      role: string;
+    }
 
-      const uniqueMessages = messages.filter((msg: ChatMessage, index: number, self: ChatMessage[]) =>
-        index === self.findIndex((m: ChatMessage) => m.content === msg.content && m.role === msg.role)
-      );
-
-
-      
-      const result = streamText({
+    const uniqueMessages = messages.filter((msg: ChatMessage, index: number, self: ChatMessage[]) =>
+      index === self.findIndex((m: ChatMessage) => m.content === msg.content && m.role === msg.role)
+    );
+    
+    const result = streamText({
         model: google('gemini-2.5-pro-exp-03-25'),
         messages: uniqueMessages,
         temperature: 0.5, // Lower temperature for more deterministic responses
@@ -905,6 +910,14 @@ export async function POST(req: Request) {
         });
         
         try {
+          // Send start step part with message ID
+          try {
+            data.append('f', { messageId: responseMessageId });
+            console.log(`Started step for message ${responseMessageId}`);
+          } catch (e) {
+            console.error('Failed to append start step part:', e);
+          }
+          
           // Accumulate text for the final message
           if (text) {
             // Extract thinking content if present
@@ -923,19 +936,25 @@ export async function POST(req: Request) {
               };
               
               try {
+                // Append reasoning using the proper protocol
+                data.append('g', thinkingContent);
                 data.appendMessageAnnotation(reasoningAnnotation);
               } catch (e) {
-                console.log('Failed to append reasoning annotation:', e);
+                console.log('Failed to append reasoning:', e);
               }
               
               // Remove thinking tags from text before adding it
               const cleanedText = text.replace(/<thinking>[\s\S]*?<\/thinking>/g, '').trim();
               if (cleanedText) {
                 currentText += cleanedText;
+                // Append as text part
+                data.append('0', cleanedText);
               }
             } else {
               // No thinking tags, add text as is
               currentText += text;
+              // Append as text part
+              data.append('0', text);
             }
             
             // Add text as message annotation
@@ -962,20 +981,47 @@ export async function POST(req: Request) {
             }
           }
 
-          // Process tool calls
+          // Process tool calls with streaming support
           if (toolCalls?.length) {
             toolCalls.forEach(toolCall => {
               const now = Date.now();
               const toolState = toolStates.get(toolCall.toolCallId);
+              const argsText = JSON.stringify(toolCall.args);
               
-              // Only send in-progress annotation if we haven't seen this tool before
+              // If this is a new tool call, start streaming
               if (!toolState) {
+                console.log(`Starting tool call streaming for ${toolCall.toolName} (${toolCall.toolCallId})`);
+                
+                try {
+                  // Send tool call streaming start part (b)
+                  data.append('b', {
+                    toolCallId: toolCall.toolCallId,
+                    toolName: toolCall.toolName || 'unknown-tool'
+                  });
+                  
+                  // Send initial tool call delta part (c)
+                  data.append('c', {
+                    toolCallId: toolCall.toolCallId,
+                    argsTextDelta: argsText
+                  });
+                  
+                  // Send full tool call part (9)
+                  data.append('9', {
+                    toolCallId: toolCall.toolCallId,
+                    toolName: toolCall.toolName || 'unknown-tool',
+                    args: toolCall.args
+                  });
+                } catch (e) {
+                  console.error(`Failed to stream tool call ${toolCall.toolCallId}:`, e);
+                }
+                
+                // Send tool-status annotation for UI
                 const callAnnotation: MessageAnnotation = {
                   type: 'tool-status',
                   toolCallId: toolCall.toolCallId,
                   status: 'in-progress',
                   toolName: toolCall.toolName || null,
-                  args: JSON.stringify(toolCall.args),
+                  args: argsText,
                   notification: {
                     show: true,
                     type: 'toast',
@@ -997,8 +1043,35 @@ export async function POST(req: Request) {
                 
                 toolStates.set(toolCall.toolCallId, { 
                   status: 'in-progress', 
-                  timestamp: now 
+                  timestamp: now,
+                  argsText,
+                  isStreaming: true
                 });
+              } 
+              // If we've seen this tool call before but args changed, send a delta
+              else if (toolState.argsText !== argsText) {
+                const delta = argsText.substring((toolState.argsText || '').length);
+                
+                if (delta) {
+                  console.log(`Sending tool call delta for ${toolCall.toolCallId}`);
+                  
+                  try {
+                    // Send delta update
+                    data.append('c', {
+                      toolCallId: toolCall.toolCallId,
+                      argsTextDelta: delta
+                    });
+                  } catch (e) {
+                    console.error(`Failed to stream tool call delta for ${toolCall.toolCallId}:`, e);
+                  }
+                  
+                  // Update stored args
+                  toolStates.set(toolCall.toolCallId, {
+                    ...toolState,
+                    argsText,
+                    timestamp: now
+                  });
+                }
               }
             });
           }
@@ -1013,6 +1086,19 @@ export async function POST(req: Request) {
 
               // Send annotation if status changed or it's a final state
               if (!toolState || toolState.status !== newStatus || newStatus === 'error' || newStatus === 'complete') {
+                console.log(`Tool ${toolResult.toolCallId} status changed to ${newStatus}`);
+                
+                try {
+                  // Send tool result part (a)
+                  data.append('a', {
+                    toolCallId: toolResult.toolCallId,
+                    result: toolResult.result
+                  });
+                } catch (e) {
+                  console.error(`Failed to stream tool result for ${toolResult.toolCallId}:`, e);
+                }
+                
+                // Send tool-status annotation for UI
                 const resultAnnotation: MessageAnnotation = {
                   type: 'tool-status',
                   toolCallId: toolResult.toolCallId,
@@ -1040,10 +1126,31 @@ export async function POST(req: Request) {
                 
                 toolStates.set(toolResult.toolCallId, { 
                   status: newStatus, 
-                  timestamp: now 
+                  timestamp: now,
+                  argsText: toolState?.argsText,
+                  isStreaming: toolState?.isStreaming
                 });
               }
             });
+          }
+          
+          // Send finish step part at the end
+          const isContinued = !finishReason || finishReason === 'tool-calls';
+          try {
+            data.append('e', {
+              finishReason: finishReason || 'unknown',
+              usage: usage ? { 
+                promptTokens: usage.inputTokens, 
+                completionTokens: usage.outputTokens 
+              } : { 
+                promptTokens: 0, 
+                completionTokens: 0 
+              },
+              isContinued: isContinued
+            });
+            console.log(`Finished step with reason: ${finishReason || 'unknown'}, continued: ${isContinued}`);
+          } catch (e) {
+            console.error('Failed to append finish step part:', e);
           }
         } catch (err) {
           console.error('Error in onStepFinish:', err);
@@ -1058,6 +1165,29 @@ export async function POST(req: Request) {
         console.log('Stream finished');
         console.log('Final message:', currentText);
         
+        // Process any images in the content (Google Gemini multimodal output)
+        // Note: This will only work with Gemini 2.5 Pro and newer models
+        if (response.content?.parts) {
+          for (const part of response.content.parts) {
+            // Check for image parts in the response
+            if (part.fileData && part.fileData.mimeType && part.fileData.mimeType.startsWith('image/')) {
+              try {
+                console.log(`Found image in response with MIME type: ${part.fileData.mimeType}`);
+                
+                // Send file part to client
+                data.append('k', {
+                  data: part.fileData.data, // Base64 encoded image data
+                  mimeType: part.fileData.mimeType
+                });
+                
+                console.log('Added image file part to stream');
+              } catch (e) {
+                console.error('Failed to append image part:', e);
+              }
+            }
+          }
+        }
+        
         // Extract Google grounding metadata (sources, search queries, etc.)
         if (response.providerMetadata?.google) {
           const metadata = response.providerMetadata.google as GoogleGenerativeAIProviderMetadata;
@@ -1070,7 +1200,33 @@ export async function POST(req: Request) {
               supportsCount: metadata.groundingMetadata.groundingSupports?.length || 0
             });
             
-            // Add sources annotation
+            // Add sources via the source protocol
+            if (metadata.groundingMetadata.groundingSupports?.length) {
+              try {
+                // Process each source for the data stream protocol
+                metadata.groundingMetadata.groundingSupports.forEach(source => {
+                  if (source.url) {
+                    // Format source for the source protocol
+                    const sourceData = {
+                      sourceType: 'url',
+                      id: `source-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                      url: source.url,
+                      title: source.title || 'Web Source',
+                      snippet: source.snippet || null
+                    };
+                    
+                    // Append as source part (h)
+                    data.append('h', sourceData);
+                  }
+                });
+                
+                console.log(`Added ${metadata.groundingMetadata.groundingSupports.length} sources using source protocol`);
+              } catch (e) {
+                console.error('Failed to append sources using source protocol:', e);
+              }
+            }
+            
+            // Add sources annotation for backward compatibility
             try {
               const sourcesAnnotation: MessageAnnotation = {
                 type: 'sources',
@@ -1107,7 +1263,15 @@ export async function POST(req: Request) {
                 console.log(`${rating.friendlyName}: risk=${rating.riskScore}% ${rating.blocked ? '(BLOCKED)' : ''}`);
               });
               
-              // Add safety rating annotation for UI
+              // Add data part for safety ratings
+              try {
+                // Add as data part (2)
+                data.append('2', [processedRatings]);
+              } catch (e) {
+                console.error('Failed to append safety ratings as data part:', e);
+              }
+              
+              // Add safety rating annotation for UI (for backward compatibility)
               try {
                 const safetyAnnotation: MessageAnnotation = {
                   type: 'safety-rating',
@@ -1131,13 +1295,17 @@ export async function POST(req: Request) {
           }
         }
         
-        // Note: Image generation is not supported in gemini-1.5-pro-latest
+        // Note: Image generation is supported in gemini-2.5-pro models
         
         // Legacy reasoning support (from Claude) - kept for backward compatibility
         if (response.reasoning) {
           console.log('Reasoning text available (legacy):', response.reasoning.substring(0, 100) + '...');
           
           try {
+            // Add as reasoning part (g)
+            data.append('g', response.reasoning);
+            
+            // Legacy annotation
             const reasoningAnnotation: MessageAnnotation = {
               type: 'reasoning',
               content: response.reasoning,
@@ -1148,13 +1316,27 @@ export async function POST(req: Request) {
             };
             data.appendMessageAnnotation(reasoningAnnotation);
           } catch (e) {
-            console.log('Failed to append reasoning annotation:', e);
+            console.log('Failed to append reasoning:', e);
           }
         }
 
         try {
+          // Send finish message part with proper finish reason and usage
+          try {
+            data.append('d', {
+              finishReason: response.finishReason || 'stop',
+              usage: {
+                promptTokens: response.usage?.inputTokens || 0,
+                completionTokens: response.usage?.outputTokens || 0
+              }
+            });
+            console.log('Added finish message part with usage data');
+          } catch (e) {
+            console.error('Failed to append finish message part:', e);
+          }
+          
           // Check if the stream is already closed before trying to append
-          // Add final message annotation with completion status
+          // Add final message annotation with completion status (for backward compatibility)
           const completionAnnotation: MessageAnnotation = {
             type: 'completion-status',
             status: 'complete',
@@ -1203,9 +1385,7 @@ export async function POST(req: Request) {
       }
     });
 
-    // Consume stream to ensure it runs to completion
-    result.consumeStream();
-
+    // Don't call consumeStream() as it's handled internally by toDataStreamResponse
     return result.toDataStreamResponse({
       data,
       sendUsage: true,
@@ -1214,50 +1394,58 @@ export async function POST(req: Request) {
       sendSources: true, // Send sources metadata from Google search
       getErrorMessage: (error: unknown) => {
         const err = error as Error;
+        let errorMessage: string;
         
         // Check if this is an AbortError, which is expected when the user stops the stream
         if (err.name === 'AbortError' || (err.message && err.message.includes('aborted'))) {
           console.log('Stream aborted by user');
-          return 'Stream stopped by user';
+          errorMessage = 'Stream stopped by user';
+        }
+        // Check for timeout errors
+        else if (err.message && (err.message.includes('timeout') || err.message.includes('exceeded'))) {
+          console.error('Function execution timeout detected');
+          errorMessage = 'The operation timed out. Please try again with a simpler request or contact support.';
+        }
+        // Check for tool execution errors
+        else if (err.message && err.message.includes('tool')) {
+          errorMessage = `Tool execution error: ${err.message}`;
+        }
+        else {
+          errorMessage = err.message || 'An error occurred';
         }
         
         // Log detailed error information for debugging
         console.error('Stream error details:', {
           name: err.name,
           message: err.message,
+          errorMessage,
           stack: err.stack,
           timestamp: new Date().toISOString()
         });
         
-        // Check for timeout errors
-        if (err.message && (err.message.includes('timeout') || err.message.includes('exceeded'))) {
-          console.error('Function execution timeout detected');
-          return 'The operation timed out. Please try again with a simpler request or contact support.';
+        // Manually send error part (3) to the client
+        try {
+          data.append('3', errorMessage);
+          
+          // Send finish message part with error finish reason
+          data.append('d', {
+            finishReason: 'error',
+            usage: {
+              promptTokens: 0,
+              completionTokens: 0
+            }
+          });
+          
+          // Close the stream after sending the error
+          data.close();
+        } catch (appendError) {
+          console.error('Failed to append error to stream:', appendError);
         }
         
-        // Check for tool execution errors
-        if (err.message && err.message.includes('tool')) {
-          return `Tool execution error: ${err.message}`;
-        }
-        
-        return err.message || 'An error occurred';
+        return errorMessage;
       }
     });
     
-    // Consume stream to ensure it runs to completion
-    result.consumeStream();
-    
-    return result.toDataStreamResponse({
-      data,
-      sendUsage: true,
-      sendReasoning: false,
-      sendReasoningDetails: false,
-      sendSources: true
-    });
-  } catch (error) {
-    console.error('Chat stream error:', error);
-    throw error; // Rethrow to be caught by outer try/catch
-  }
   } catch (error) {
     console.error('Chat error:', error);
     return new Response(JSON.stringify({ 

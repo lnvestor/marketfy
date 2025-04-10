@@ -97,15 +97,12 @@ function TimelineItemComponent({
         <div className="flex items-center gap-2">
           {/* Tool Logo */}
           <div className="relative shrink-0">
-            <div className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center bg-black dark:bg-white">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
-                fill="currentColor" 
-                className="h-3 w-3 text-white dark:text-black"
-              >
-                <circle cx="12" cy="12" r="10" />
-              </svg>
+            <div className="w-6 h-6 overflow-hidden flex items-center justify-center">
+              <img 
+                src="/integriverse/star.png" 
+                alt="Tool icon" 
+                className="h-6 w-6 animate-spin-slow" 
+              />
             </div>
           </div>
 
@@ -144,15 +141,12 @@ function TimelineItemComponent({
           >
             <div className="flex items-center justify-between p-2 border-b border-gray-200 dark:border-neutral-700">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center bg-black dark:bg-white">
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 24 24" 
-                    fill="currentColor" 
-                    className="h-3 w-3 text-white dark:text-black"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                  </svg>
+                <div className="w-6 h-6 overflow-hidden flex items-center justify-center">
+                  <img 
+                    src="/integriverse/star.png" 
+                    alt="Tool icon" 
+                    className="h-6 w-6 animate-spin-slow" 
+                  />
                 </div>
                 <h3 className="text-sm text-gray-700 dark:text-gray-300">{item.toolName}</h3>
               </div>
