@@ -91,19 +91,19 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
     <>
       <div 
         ref={dropAreaRef}
-        className={`relative p-4 border-t border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 z-40
-          ${isDragging ? 'ring-1 ring-teal-400/30' : ''}`}
+        className={`relative p-4 border-t border-emerald-100/20 dark:border-emerald-800/20 bg-white/10 dark:bg-neutral-900/10 backdrop-blur-xl z-40
+          ${isDragging ? 'ring-1 ring-emerald-400/30' : ''}`}
       >
         {isDragging && (
-          <div className="absolute inset-0 bg-white/90 dark:bg-black/90 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="p-3 flex items-center gap-2">
-              <Upload className="h-4 w-4 text-teal-500" />
-              <span className="text-sm text-gray-600 dark:text-gray-300">Drop to upload</span>
+          <div className="absolute inset-0 bg-white/60 dark:bg-black/60 backdrop-blur-md flex items-center justify-center z-50">
+            <div className="p-3 flex items-center gap-2 bg-emerald-50/20 dark:bg-emerald-900/20 backdrop-blur-lg rounded-full px-4 py-2 shadow-xl">
+              <Upload className="h-4 w-4 text-emerald-500" />
+              <span className="text-sm text-emerald-600 dark:text-emerald-300">Drop to upload</span>
             </div>
           </div>
         )}
         
-        <form onSubmit={!isLoading ? handleSubmit : (e) => e.preventDefault()} className="relative max-w-3xl mx-auto flex flex-col gap-2 w-full">
+        <form onSubmit={!isLoading ? handleSubmit : (e) => e.preventDefault()} className="relative max-w-3xl mx-auto flex flex-col gap-2 w-full glass-effect">
           {/* File Preview */}
           {files && files.length > 0 && (
             <div className="p-2 mb-2">
@@ -151,32 +151,32 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
             <div className="flex-1 flex items-center">
               <div className="relative flex-1 max-w-full">
                 {/* Message Input */}
-                <div className={`w-full flex-1 relative rounded-md overflow-hidden 
+                <div className={`w-full flex-1 relative rounded-none overflow-hidden glass-input
                   ${reasoningMode 
-                    ? 'border border-black/20 dark:border-white/20' 
-                    : 'border border-gray-200 dark:border-neutral-800'
+                    ? 'border-0 border-b-2 border-black/40 dark:border-white/40' 
+                    : 'border-0 border-b-2 border-black/40 dark:border-white/40'
                   } 
-                  transition-all duration-200 bg-white dark:bg-neutral-900 overflow-hidden`}
+                  transition-all duration-200 overflow-hidden`}
                 >
                 {reasoningMode && (
                   <div className="absolute top-0 left-0 h-0.5 w-full bg-black dark:bg-white"></div>
                 )}
                 
                 {/* Gradient fade for text overflow */}
-                <div className="absolute right-[72px] top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white dark:to-neutral-900 pointer-events-none"></div>
+                <div className="absolute right-[72px] top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/20 dark:to-neutral-900/20 pointer-events-none"></div>
                 
                 <input
                   value={input}
                   onChange={onChange}
                   placeholder={reasoningMode ? "Ask with step-by-step reasoning..." : "Start typing..."}
-                  className={`w-full h-11 px-4 pr-24 text-sm ${reasoningMode ? 'text-black dark:text-white font-medium' : 'text-gray-700 dark:text-gray-300'} placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-transparent focus:outline-none transition-all overflow-x-hidden text-ellipsis`}
+                  className={`w-full h-11 px-4 pr-24 text-sm ${reasoningMode ? 'text-black dark:text-white font-medium' : 'text-black dark:text-white'} placeholder:text-black/60 dark:placeholder:text-white/60 bg-transparent focus:outline-none transition-all overflow-x-hidden text-ellipsis backdrop-blur-lg`}
                   disabled={isLoading}
                 />
                 
                 {/* Right-side Buttons */}
-                <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1 z-10 bg-white dark:bg-neutral-900 pl-1">
+                <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1 z-10 bg-transparent pl-1 backdrop-blur-lg">
                   {/* Attachment */}
-                  <label className="p-1 rounded-md text-gray-400 hover:text-teal-500 transition-colors cursor-pointer">
+                  <label className="p-1 rounded-full text-emerald-500/70 hover:text-emerald-400 transition-colors cursor-pointer">
                     <Paperclip className="h-4 w-4" />
                     <input
                       type="file"
@@ -192,10 +192,10 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
                   <button
                     type="button"
                     onClick={() => setReasoningMode(!reasoningMode)}
-                    className={`p-1 rounded-md transition-colors
+                    className={`p-1 rounded-full transition-colors
                       ${reasoningMode 
-                        ? 'text-black dark:text-white' 
-                        : 'text-gray-400 hover:text-black dark:hover:text-white'
+                        ? 'text-emerald-400 dark:text-emerald-300' 
+                        : 'text-emerald-500/70 hover:text-emerald-400 dark:hover:text-emerald-300'
                       }`}
                   >
                     <Brain className="h-4 w-4" />
@@ -206,7 +206,7 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
                     <button
                       type="button"
                       onClick={() => stop()}
-                      className="ml-1 flex items-center justify-center rounded-md bg-red-50 dark:bg-red-900/10 px-2 py-1.5 text-xs text-red-600 dark:text-red-400"
+                      className="ml-1 flex items-center justify-center rounded-full bg-red-50/20 dark:bg-red-900/20 backdrop-blur-lg px-2 py-1.5 text-xs text-red-600 dark:text-red-400"
                     >
                       <StopCircle className="h-3.5 w-3.5 mr-1" />
                       Stop
@@ -215,7 +215,7 @@ export function ChatInput({ input, isLoading, onSubmit, onChange, files, onFileC
                     <button
                       type="submit"
                       disabled={!input.trim() && (!files || files.length === 0)}
-                      className="ml-1 rounded-md bg-white dark:bg-neutral-900 p-1.5 text-black dark:text-white border border-zinc-200 dark:border-zinc-800 disabled:opacity-30 disabled:text-gray-400 disabled:cursor-not-allowed transition-all"
+                      className="ml-1 rounded-full glass-button p-1.5 text-emerald-600 dark:text-emerald-300 disabled:opacity-30 disabled:text-gray-400 disabled:cursor-not-allowed transition-all"
                     >
                       <Send className="h-4 w-4" />
                     </button>

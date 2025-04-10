@@ -124,12 +124,12 @@ export function ChatSidebar({
           <button
             onClick={onNewChat}
             disabled={isLoading || aiLoading}
-            className={`mb-2 flex items-center gap-3 rounded-md p-2 text-emerald-700 bg-white border border-emerald-100 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${sidebarCollapsed ? 'justify-center' : ''}`}
+            className={`mb-2 flex items-center gap-3 rounded-md p-2 text-gray-800 bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${sidebarCollapsed ? 'justify-center' : ''}`}
           >
             {isLoading ? (
-              <div className="animate-pulse h-4 w-4 rounded-full border-[1.5px] border-emerald-500 border-b-transparent animate-spin" />
+              <div className="animate-pulse h-4 w-4 rounded-full border-[1.5px] border-black border-b-transparent animate-spin" />
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-black">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
@@ -137,7 +137,7 @@ export function ChatSidebar({
             {!sidebarCollapsed && (
               <span className="text-xs font-medium">
                 {isLoading ? (
-                  <span className="inline-flex items-center text-emerald-600">
+                  <span className="inline-flex items-center text-black">
                     <span className="animate-ellipsis tracking-wider">.</span>
                     <span className="animate-ellipsis delay-300 tracking-wider">.</span>
                     <span className="animate-ellipsis delay-600 tracking-wider">.</span>
@@ -152,12 +152,12 @@ export function ChatSidebar({
         </div>
 
         {/* Divider */}
-        <div className="mx-3 my-2 h-px bg-emerald-100"></div>
+        <div className="mx-3 my-2 h-px bg-black/10"></div>
 
         {/* Chat List Heading */}
         {!sidebarCollapsed && (
           <div className="px-4 py-2 flex items-center justify-between">
-            <h3 className="text-xs text-emerald-600 font-medium uppercase">Chats</h3>
+            <h3 className="text-xs text-black font-medium uppercase">Chats</h3>
           </div>
         )}
 
