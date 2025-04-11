@@ -143,29 +143,34 @@ export function ChatMessages({ messages, isLoading, error, onRetry }: ChatMessag
           ${!timelineCollapsed ? 'pr-64' : ''}
         `}
       >
-        {/* Error Message - now fixed at the top with enough z-index to not overlap with inputs */}
-        <AnimatePresence>
-          {error && (
-            <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-20 flex justify-center">
-              <motion.div
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                className="max-w-xl animate-pulse-slow"
-              >
-                <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-md flex items-center justify-between border-2 border-red-400 dark:border-red-500 text-red-700 dark:text-red-400 shadow-md">
-                  <span className="text-xs">Something went wrong. Please try again.</span>
+        {/* Error Message - black and white with no animation and showing error reason */}
+        {error && (
+          <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-20 flex justify-center">
+            <div className="max-w-xl">
+              <div className="p-3 bg-white dark:bg-black rounded-md flex flex-col border border-black dark:border-white text-black dark:text-white shadow-md">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium">Something went wrong. Please try again.</span>
                   <button
                     onClick={onRetry}
-                    className="ml-2 text-xs font-medium bg-red-100 dark:bg-red-900/30 px-2 py-0.5 rounded border border-red-200 dark:border-red-800"
+                    className="ml-3 text-xs font-medium bg-white dark:bg-black px-2 py-1 rounded border border-black dark:border-white"
                   >
                     Try Again
                   </button>
                 </div>
-              </motion.div>
+                {typeof error === 'string' && error.length > 0 && (
+                  <div className="text-xs text-gray-600 dark:text-gray-400 max-h-24 overflow-y-auto mt-1 border-t border-gray-200 dark:border-gray-800 pt-1">
+                    {error}
+                  </div>
+                )}
+                {error instanceof Error && (
+                  <div className="text-xs text-gray-600 dark:text-gray-400 max-h-24 overflow-y-auto mt-1 border-t border-gray-200 dark:border-gray-800 pt-1">
+                    {error.message}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </AnimatePresence>
+          </div>
+        )}
 
         <div className="max-w-3xl w-full pt-6 pb-4 relative px-4 ml-12">
           {messages.map((message, index) => (

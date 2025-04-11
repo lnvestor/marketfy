@@ -532,7 +532,17 @@ export function useMultiverseChat(sessionId: string | null, onSessionUpdate: () 
       timestamp: new Date().toISOString()
     });
     
-    if ((!input.trim() && (!files || files.length === 0)) || aiLoading) return;
+    // Prevent empty submissions or submissions while already loading
+    if (aiLoading) return;
+    
+    // Make sure we have either text content or files
+    const hasTextContent = input.trim().length > 0;
+    const hasFiles = files && files.length > 0;
+    
+    if (!hasTextContent && !hasFiles) {
+      console.log('Preventing empty submission');
+      return;
+    }
     
     setError(null);
 
@@ -631,7 +641,8 @@ export function useMultiverseChat(sessionId: string | null, onSessionUpdate: () 
         // Submit with attachments - don't add user message to array since API will return it
         console.log('Submitting message with session:', { sessionId: session.id });
         handleAiSubmit(e, {
-          experimental_attachments: attachments
+          experimental_attachments: attachments,
+          allowEmptySubmit: false
         });
       } else if (currentSessionId) {
         console.log('Using existing session:', { currentSessionId });
@@ -691,7 +702,8 @@ export function useMultiverseChat(sessionId: string | null, onSessionUpdate: () 
 
         // Submit normally - don't add user message to array since API will return it
         handleAiSubmit(e, {
-          experimental_attachments: attachments
+          experimental_attachments: attachments,
+          allowEmptySubmit: false
         });
       }
     } catch (error) {

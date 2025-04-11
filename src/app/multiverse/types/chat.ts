@@ -81,6 +81,6 @@ export interface ChatMessagesProps {
     parts?: MessagePart[];
   }>;
   isLoading?: boolean;
-  error?: string | null;
+  error?: string | Error | null;
   onRetry?: () => void;
 }

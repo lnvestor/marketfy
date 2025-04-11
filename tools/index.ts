@@ -4,6 +4,9 @@ export * from './netsuite';
 // Search tools
 export * from './search';
 
+// Google tools
+export * from './google';
+
 // Claude Think tool
 export * from './claudethink';
 

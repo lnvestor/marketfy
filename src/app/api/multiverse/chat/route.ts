@@ -33,6 +33,10 @@ import {
   createPerplexitySearchTool,
   setSearchCredentials,
   
+  // Google tools
+  createGoogleTrendsTool,
+  setGoogleTrendsCredentials,
+  
   // Claude Think tool
   createClaudeThinkTool
 } from '../../../../../tools';
@@ -219,6 +223,25 @@ export async function POST(req: Request) {
     
     // Proceed with the request after authentication is verified
     const { messages, enabledAddons, connections, id, reasoningMode } = await req.json();
+    
+    // Check if the last message is empty (prevent empty submission errors)
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage && (!lastMessage.content || lastMessage.content.trim() === '')) {
+        console.error('Empty message content detected:', {
+          messageIndex: messages.length - 1,
+          role: lastMessage.role,
+          timestamp: new Date().toISOString()
+        });
+        return new Response(JSON.stringify({ 
+          error: 'Empty message content is not allowed'
+        }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+    
     console.log('Chat request received:', {
       userId: authenticatedUser.id,
       messageCount: messages.length,
@@ -322,15 +345,33 @@ export async function POST(req: Request) {
     // Generate unique message ID for this response
     const responseMessageId = `msg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-    // Filter out duplicate messages
+    // Filter out duplicate and empty messages
     interface ChatMessage {
       content: string;
       role: string;
     }
 
-    const uniqueMessages = messages.filter((msg: ChatMessage, index: number, self: ChatMessage[]) =>
-      index === self.findIndex((m: ChatMessage) => m.content === msg.content && m.role === msg.role)
-    );
+    const uniqueMessages = messages
+      // First, ensure no message has empty content
+      .filter((msg: ChatMessage) => msg && typeof msg.content === 'string' && msg.content.trim() !== '')
+      // Then, filter out duplicates
+      .filter((msg: ChatMessage, index: number, self: ChatMessage[]) =>
+        index === self.findIndex((m: ChatMessage) => m.content === msg.content && m.role === msg.role)
+      );
+    
+    // Validate that we have valid messages after filtering
+    if (uniqueMessages.length === 0) {
+      console.error('No valid messages found after filtering:', {
+        originalCount: messages.length,
+        timestamp: new Date().toISOString()
+      });
+      return new Response(JSON.stringify({ 
+        error: 'No valid messages found in the request'
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
     
     const result = streamText({
         model: google('gemini-2.5-pro-exp-03-25'),
@@ -821,6 +862,9 @@ export async function POST(req: Request) {
                 firstMessage: args.messages[0]?.content.substring(0, 50) + '...',
                 toolCallId: options.toolCallId
               });
+
+              // Track execution start time
+              const startTime = Date.now();
               
               // Get credentials from environment or connections
               // If Perplexity addon is enabled, use its connection
@@ -830,13 +874,25 @@ export async function POST(req: Request) {
                 // Otherwise use environment variable (default behavior)
                 setSearchCredentials('perplexity', process.env.PERPLEXITY_API_KEY || null);
               }
-              
-              const result = await createPerplexitySearchTool.execute(args, {
-                toolCallId: options.toolCallId,
-                messages: options.messages
-              });
 
-              console.log('Perplexity search tool execution completed:', {
+              // Create a timeout promise
+              const timeoutPromise = new Promise<never>((_, reject) => {
+                setTimeout(() => {
+                  reject(new Error('Perplexity search timed out after 8 seconds'));
+                }, 8000); // 8 second timeout
+              });
+              
+              // Race the actual execution against the timeout
+              const result = await Promise.race([
+                createPerplexitySearchTool.execute(args, {
+                  toolCallId: options.toolCallId,
+                  messages: options.messages
+                }),
+                timeoutPromise
+              ]);
+
+              const executionTime = Date.now() - startTime;
+              console.log(`Perplexity search tool execution completed in ${executionTime}ms:`, {
                 timestamp: new Date().toISOString(),
                 status: 'success',
                 toolCallId: options.toolCallId
@@ -880,6 +936,102 @@ export async function POST(req: Request) {
               return JSON.stringify({
                 status: 'error',
                 error: 'Perplexity search failed: ' + errorMessage,
+                details: {
+                  code: 'SEARCH_ERROR',
+                  message: errorMessage
+                }
+              });
+            }
+          }
+        };
+        
+        // Add Google Trends tool as a core feature
+        console.log('Adding Google Trends tool as a core feature');
+        
+        tools.googleTrends = {
+          ...createGoogleTrendsTool,
+          execute: async (args, options) => {
+            try {
+              console.log('Executing Google Trends tool:', {
+                timestamp: new Date().toISOString(),
+                query: args.q || 'No query specified',
+                dataType: args.data_type || 'TIMESERIES (default)',
+                toolCallId: options.toolCallId
+              });
+
+              // Track execution start time
+              const startTime = Date.now();
+              
+              // Get credentials from environment or connections
+              // If Google Trends addon is enabled, use its connection
+              if (enabledAddons?.includes('GoogleTrends') && connections?.GoogleTrends?.api_key) {
+                setGoogleTrendsCredentials(connections.GoogleTrends.api_key);
+              } else {
+                // Otherwise use environment variable (default behavior)
+                setGoogleTrendsCredentials(process.env.SERPAPI_KEY || null);
+              }
+
+              // Create a timeout promise
+              const timeoutPromise = new Promise<never>((_, reject) => {
+                setTimeout(() => {
+                  reject(new Error('Google Trends search timed out after 10 seconds'));
+                }, 10000); // 10 second timeout
+              });
+              
+              // Race the actual execution against the timeout
+              const result = await Promise.race([
+                createGoogleTrendsTool.execute(args, {
+                  toolCallId: options.toolCallId,
+                  messages: options.messages
+                }),
+                timeoutPromise
+              ]);
+
+              const executionTime = Date.now() - startTime;
+              console.log(`Google Trends tool execution completed in ${executionTime}ms:`, {
+                timestamp: new Date().toISOString(),
+                status: 'success',
+                toolCallId: options.toolCallId
+              });
+
+              return result;
+            } catch (err) {
+              console.error('Google Trends tool execution failed:', {
+                timestamp: new Date().toISOString(),
+                error: err instanceof Error ? err.message : 'Unknown error',
+                toolCallId: options.toolCallId
+              });
+
+              const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+              
+              // Check if the error is related to invalid parameters
+              if (errorMessage.includes('Validation error') || errorMessage.includes('Invalid')) {
+                return JSON.stringify({
+                  status: 'error',
+                  error: 'Invalid Google Trends parameters. ' + errorMessage,
+                  details: {
+                    code: 'INVALID_PARAMETERS',
+                    message: errorMessage
+                  }
+                });
+              }
+              
+              // Check if the error is an authentication issue
+              if (errorMessage.includes('API key') || errorMessage.includes('401')) {
+                return JSON.stringify({
+                  status: 'error',
+                  error: 'Authentication failed. Please check your SerpAPI key.',
+                  details: {
+                    code: 'INVALID_API_KEY',
+                    message: errorMessage
+                  }
+                });
+              }
+              
+              // Default error case
+              return JSON.stringify({
+                status: 'error',
+                error: 'Google Trends search failed: ' + errorMessage,
                 details: {
                   code: 'SEARCH_ERROR',
                   message: errorMessage
